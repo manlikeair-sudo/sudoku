@@ -231,87 +231,127 @@
     raf = requestAnimationFrame(frame);
   }
 
-  // ---- 강아지 (SVG) ----
-  // brown: 흰 몸 + 진한 캐러멜 오렌지 얼굴·등무늬, 이마 흰 줄, 술 달린 큰 귀, 풍성한 흰 꼬리
-  // white: 크림 화이트 + 눈가·귀 끝 연한 피치, 뾰족하게 선 귀, 갈색빛 분홍 코, 동그랗게 말린 꼬리
+  // ---- 강아지 (SVG) : 옆모습 전신 파피용 ----
+  // 오른쪽을 보고 달리는/뛰는 작은 파피용. 가는 네 다리, 비단결 털(술), 등 위로 말려 올라간 깃털 꼬리, 나비 같은 큰 귀.
   function dogSVG(kind) {
-    var brown = kind === 'brown';
+    var brown = kind === 'brown', id = '-' + kind;
     var C = brown ? {
-      fur: '#D98A34', edge: '#A9611F', inner: '#F7D6AE', fringe: '#B8702A', head: '#D98A34',
-      body: '#FFFFFF', bodyEdge: '#E3D6C6', patch: '#D98A34', brow: '#F2B877', nose: '#1E1A1E', eye: '#241A18', cheek: '#FFB3C7'
+      head: '#D9822E', headHi: '#F0A95B', headLo: '#B8641F', earA: '#E3924A', earB: '#BF6A24', earIn: '#F6D2A6', strand: '#A9571A',
+      body: '#FFFFFF', bodyLo: '#EFE5D8', line: '#DCCDB9', patchA: '#E8993F', patchB: '#C4701F', far: '#EFE6DA', farLine: '#D8C9B4',
+      nose: '#1B181B', eye: '#241917', brow: '#F2B877', tail: '#FFFFFF', tailLo: '#EADFCF'
     } : {
-      fur: '#FFFAF1', edge: '#E3CFB4', inner: '#F8C9C4', fringe: '#EBD7BC', head: '#FFFAF1',
-      body: '#FFFAF1', bodyEdge: '#E8D8C2', patch: '#F0CBA0', brow: '#F0CBA0', nose: '#7C5250', eye: '#2E1B17', cheek: '#FFB3BF'
+      head: '#FFF8EC', headHi: '#FFFFFF', headLo: '#EBDCC6', earA: '#FFF9EF', earB: '#F1E2CC', earIn: '#F7BDB8', strand: '#E2CFB3',
+      body: '#FFF8EC', bodyLo: '#EFE2CE', line: '#E6D6BF', patchA: '#F3D0A8', patchB: '#E6B98B', far: '#F3E8D6', farLine: '#E0D0B8',
+      nose: '#85544F', eye: '#2F1C18', brow: '#EFC9A0', tail: '#FFFAF2', tailLo: '#EEDFC8'
     };
-    function earG(cls, flip) {
-      var inner;
-      if (brown) {
-        var ep = 'M90,70 C70,80 38,74 22,48 Q10,44 14,36 Q4,30 12,22 Q6,14 18,10 Q20,2 32,6 Q38,4 44,12 C62,22 78,40 92,56 Z';
-        inner = '<g transform="translate(90 62) scale(1.12 1.22) translate(-90 -62)">' +
-          '<path d="' + ep + '" fill="' + C.fur + '" stroke="' + C.edge + '" stroke-width="2.5" stroke-linejoin="round"/>' +
-          '<path d="M86,64 C70,70 46,64 32,44 Q26,32 34,24 Q42,22 50,32 C64,42 76,50 86,60 Z" fill="' + C.inner + '" opacity=".92"/>' +
-          '<path d="M16,34 Q24,28 30,36 M20,20 Q30,18 36,26 M30,9 Q40,11 43,19 M22,52 Q30,52 36,58" fill="none" stroke="' + C.fringe + '" stroke-width="2.2" stroke-linecap="round" opacity=".7"/>' +
-          '</g>';
-      } else {
-        inner = '<path d="M70,94 C54,72 38,42 42,16 Q44,6 54,12 C82,24 104,44 112,66 Z" fill="' + C.fur + '" stroke="' + C.edge + '" stroke-width="2.5" stroke-linejoin="round"/>' +
-          '<path d="M42,16 Q44,6 54,12 C64,17 72,24 78,32 C66,36 52,32 43,24 Z" fill="' + C.patch + '" opacity=".95"/>' +
-          '<path d="M58,36 C60,54 74,68 94,74 C84,56 76,46 66,34 Z" fill="' + C.inner + '"/>' +
-          '<path d="M52,22 C56,30 60,34 66,38 M60,26 C64,34 70,40 76,44" fill="none" stroke="#EBB9B2" stroke-width="1.6" stroke-linecap="round" opacity=".7"/>' +
-          '<path d="M50,52 q-6,4 -4,10 M60,64 q-6,4 -3,10" fill="none" stroke="' + C.fringe + '" stroke-width="2" stroke-linecap="round" opacity=".6"/>';
-      }
-      return '<g class="' + cls + '"' + (flip ? ' transform="translate(240,0) scale(-1,1)"' : '') + '><g class="earflap">' + inner + '</g></g>';
-    }
-    var s = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 270" class="dogsvg" aria-hidden="true">';
-    // 꼬리 (뒤쪽, 풍성하게)
-    s += '<g class="tail">';
+    var s = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320" class="dogsvg" aria-hidden="true">';
+    s += '<defs>' +
+      '<linearGradient id="gb' + id + '" gradientUnits="userSpaceOnUse" x1="0" y1="150" x2="0" y2="242"><stop offset="0" stop-color="' + C.body + '"/><stop offset="1" stop-color="' + C.bodyLo + '"/></linearGradient>' +
+      '<linearGradient id="gp' + id + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + C.patchA + '"/><stop offset="1" stop-color="' + C.patchB + '"/></linearGradient>' +
+      '<linearGradient id="gh' + id + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + C.headHi + '"/><stop offset=".55" stop-color="' + C.head + '"/><stop offset="1" stop-color="' + C.headLo + '"/></linearGradient>' +
+      '<linearGradient id="ge' + id + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + C.earA + '"/><stop offset="1" stop-color="' + C.earB + '"/></linearGradient>' +
+      '<linearGradient id="gt' + id + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + C.tail + '"/><stop offset="1" stop-color="' + C.tailLo + '"/></linearGradient>' +
+      '<clipPath id="cb' + id + '"><path d="M205,158 C170,152 130,154 108,170 C92,182 94,214 112,226 C140,240 190,240 232,230 C252,224 260,200 252,184 C246,168 228,160 205,158 Z"/></clipPath>' +
+      '</defs>';
+    s += '<ellipse cx="190" cy="297" rx="140" ry="9" fill="#000" opacity=".13"/>';
+    s += '<g class="dogbow">';
+    // ---- 꼬리 (등 위로 휘어 올라간 깃털 꼬리) ----
+    s += '<g class="tail"><g transform="translate(116 186) scale(.82) translate(-116 -186)">';
     if (brown) {
-      s += '<path d="M168,214 C196,214 226,186 222,146 C220,128 208,116 198,126 C204,150 196,176 172,186 Z" fill="#FFFFFF" stroke="' + C.bodyEdge + '" stroke-width="2.5" stroke-linejoin="round"/>' +
-           '<path d="M214,140 q-2,-12 -10,-12 M208,162 q8,-8 8,-18 M196,180 q10,-6 12,-16" fill="none" stroke="#EADFD0" stroke-width="2.2" stroke-linecap="round"/>';
+      s += '<path d="M116,186 C90,180 66,152 64,122 L54,116 C58,108 66,104 70,100 L62,90 C74,84 84,78 92,72 L88,60 C104,60 116,54 128,52 L128,42 C144,48 156,52 168,58 L174,48 C186,58 200,70 204,86 L214,84 C214,100 208,112 200,124 C188,106 168,96 146,100 C126,104 116,124 122,150 C124,164 122,176 116,186 Z" fill="url(#gt' + id + ')" stroke="' + C.line + '" stroke-width="2.2" stroke-linejoin="round"/>';
+      s += '<path d="M116,186 C100,182 86,170 78,154 C96,160 110,166 122,150 C124,164 122,176 116,186 Z" fill="url(#gp' + id + ')"/>';
     } else {
-      s += '<path d="M168,216 C202,218 226,192 214,160 C208,144 192,142 190,156 C196,166 192,180 174,190 Z" fill="' + C.body + '" stroke="' + C.bodyEdge + '" stroke-width="2.5" stroke-linejoin="round"/>' +
-           '<path d="M212,168 q-8,2 -12,10 M200,186 q8,-2 12,-8" fill="none" stroke="#EFE0CB" stroke-width="2.2" stroke-linecap="round"/>';
+      s += '<path d="M116,186 C88,180 64,154 62,126 L50,124 C54,114 62,108 68,106 L58,96 C70,90 80,84 88,78 L82,66 C98,66 112,60 124,56 L126,44 C140,50 154,54 166,60 L174,50 C188,60 202,72 206,88 L216,88 C214,104 206,114 196,122 L204,126 C196,140 178,146 164,138 C152,130 156,116 168,116 C160,104 142,104 132,116 C122,132 126,158 124,170 C122,176 120,182 116,186 Z" fill="url(#gt' + id + ')" stroke="' + C.line + '" stroke-width="2.2" stroke-linejoin="round"/>';
     }
-    s += '</g>';
-    // 몸
+    s += '<path d="M72,126 C74,98 104,72 142,70 M92,128 C94,108 114,86 144,84 M166,70 C186,74 196,86 198,98" fill="none" stroke="' + C.tailLo + '" stroke-width="2.4" stroke-linecap="round" opacity=".9"/>';
+    s += '</g></g>';
+    // ---- 먼 쪽 다리 ----
+    function leg(cls, d, px, py, fill, line, fur) {
+      return '<g class="leg ' + cls + '">' + (fur || '') +
+        '<path d="' + d + '" fill="none" stroke="' + line + '" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>' +
+        '<path d="' + d + '" fill="none" stroke="' + fill + '" stroke-width="9.5" stroke-linecap="round" stroke-linejoin="round"/>' +
+        '<ellipse cx="' + px + '" cy="' + py + '" rx="13" ry="6.4" fill="' + fill + '" stroke="' + line + '" stroke-width="2.2"/>' +
+        '<path d="M' + (px - 3) + ',' + (py - 3) + ' v5 M' + (px + 3) + ',' + (py - 3) + ' v5" stroke="' + line + '" stroke-width="1.6" stroke-linecap="round"/></g>';
+    }
+    s += leg('legFH', 'M156,216 C148,236 140,250 138,262 L138,286', 146, 290, C.far, C.farLine);
+    s += leg('legFF', 'M256,216 L264,258 L268,286', 276, 290, C.far, C.farLine);
+    // ---- 몸 ----
     s += '<g class="dbody">';
-    s += '<ellipse cx="120" cy="206" rx="54" ry="52" fill="' + C.body + '" stroke="' + C.bodyEdge + '" stroke-width="2.5"/>';
-    s += '<clipPath id="bc-' + kind + '"><ellipse cx="120" cy="206" rx="54" ry="52"/></clipPath><g clip-path="url(#bc-' + kind + ')">';
+    s += '<path d="M206,160 C232,152 250,136 256,116 L284,134 C284,160 276,188 262,206 C246,232 222,236 206,228 Z" fill="url(#gb' + id + ')"/>';
+    s += '<path d="M284,134 C284,160 276,188 262,206" fill="none" stroke="' + C.line + '" stroke-width="2.2" stroke-linecap="round"/>';
+    s += '<path d="M205,158 C170,152 130,154 108,170 C92,182 94,214 112,226 C140,240 190,240 232,230 C252,224 260,200 252,184 C246,168 228,160 205,158 Z" fill="url(#gb' + id + ')" stroke="' + C.line + '" stroke-width="2.2"/>';
+    s += '<g clip-path="url(#cb' + id + ')">';
     if (brown) {
-      s += '<path d="M60,170 C84,176 98,196 96,222 C94,240 84,252 66,258 L60,258 Z" fill="' + C.patch + '"/>' +
-           '<path d="M180,170 C156,176 142,196 144,222 C146,240 156,252 174,258 L180,258 Z" fill="' + C.patch + '"/>';
+      s += '<path d="M86,150 L226,150 C232,168 222,184 204,188 C188,192 176,184 160,192 C146,200 130,204 114,216 C98,226 90,214 86,200 Z" fill="url(#gp' + id + ')"/>';
+      s += '<path d="M176,150 L188,150 L166,194 L156,196 Z" fill="#FFFFFF"/>';
     } else {
-      s += '<path d="M60,176 C80,184 90,204 88,226 C86,240 78,250 66,254 L60,254 Z" fill="' + C.patch + '" opacity=".55"/>';
+      s += '<path d="M96,160 C124,152 160,152 186,160 C170,172 150,176 132,180 C114,184 100,192 94,204 Z" fill="' + C.patchA + '" opacity=".55"/>';
+    }
+    s += '<path d="M100,226 C140,244 200,244 250,226 L250,246 L100,246 Z" fill="' + C.bodyLo + '" opacity=".6"/>';
+    s += '<path d="M120,176 q10,-6 22,-4 M150,170 q12,-5 24,-2 M180,168 q10,-3 22,0" fill="none" stroke="' + (brown ? '#B8681F' : C.line) + '" stroke-width="2" stroke-linecap="round" opacity=".45"/>';
+    s += '</g>';
+    // 뒷다리 허벅지 술(깃털)
+    s += '<path d="M112,206 L100,214 L110,216 L102,230 L114,226 L112,238 L124,224 C132,216 136,208 136,198 Z" fill="' + (brown ? 'url(#gp' + id + ')' : C.body) + '" stroke="' + C.line + '" stroke-width="1.8" stroke-linejoin="round"/>';
+    s += '</g>';
+    // ---- 가까운 쪽 다리 ----
+    s += leg('legNH', 'M138,212 C128,234 118,248 116,262 L114,286', 122, 290, brown ? '#FFFFFF' : C.body, C.line);
+    s += leg('legNF', 'M234,222 L240,260 L242,286', 252, 290, brown ? '#FFFFFF' : C.body, C.line);
+    // ---- 머리 (목 + 얼굴 + 귀) ----
+    s += '<g class="head">';
+    if (brown) s += '<path d="M208,158 C230,150 248,136 258,114 L246,108 C240,132 226,146 206,150 Z" fill="url(#gp' + id + ')"/>';
+    else s += '<path d="M208,158 C230,150 248,136 258,114 L248,110 C242,130 228,144 210,150 Z" fill="' + C.patchA + '" opacity=".6"/>';
+    // 가슴 술
+    s += '<path d="M268,196 L276,204 L262,212 L268,224 L252,222 L252,238 L238,230 L230,246 L222,232 L208,240 L210,226 C236,226 258,216 268,196 Z" fill="#FFFFFF" stroke="' + C.line + '" stroke-width="1.8" stroke-linejoin="round"/>';
+    s += '<path d="M244,222 q-2,8 -6,14 M258,214 q0,8 -4,14 M228,230 q-2,6 -6,10" fill="none" stroke="' + C.bodyLo + '" stroke-width="2" stroke-linecap="round"/>';
+    // 먼 쪽 귀
+    s += '<g class="earF">';
+    if (brown) {
+      s += '<path d="M288,96 C310,92 336,76 342,48 L354,44 C350,38 344,34 338,34 L342,22 C332,20 324,22 318,28 L316,14 C306,16 298,24 296,34 L290,26 C284,38 284,54 284,72 Z" fill="' + C.earA + '" stroke="' + C.strand + '" stroke-width="1.8" stroke-linejoin="round"/>';
+      s += '<path d="M344,52 C350,62 350,74 347,84 M334,62 C339,72 339,82 336,90" fill="none" stroke="' + C.strand + '" stroke-width="2" stroke-linecap="round" opacity=".6"/>';
+    } else {
+      s += '<path d="M284,96 C288,64 308,36 334,24 C342,52 330,82 308,100 Z" fill="' + C.earB + '" stroke="' + C.line + '" stroke-width="1.8" stroke-linejoin="round"/>';
+      s += '<path d="M334,24 C338,34 338,44 334,54 C326,48 322,40 322,32 Z" fill="' + C.patchB + '" opacity=".9"/>';
     }
     s += '</g>';
-    s += '<ellipse cx="120" cy="218" rx="30" ry="38" fill="#FFFFFF" opacity="' + (brown ? 1 : .55) + '"/>';
-    s += '<path d="M94,190 q6,10 13,0 q6,10 13,0 q6,10 13,0 q6,10 13,0" fill="none" stroke="#E6DCCD" stroke-width="2.5" stroke-linecap="round"/>';
-    s += '</g>';
-    // 박수 치는 앞발
-    s += '<g class="pawL"><ellipse cx="80" cy="192" rx="14" ry="22" fill="#FFFFFF" stroke="' + C.bodyEdge + '" stroke-width="2.5" transform="rotate(18 80 192)"/><path d="M74,178 v6 M81,176 v7" stroke="#E0D4C4" stroke-width="2" stroke-linecap="round"/></g>';
-    s += '<g class="pawR"><ellipse cx="160" cy="192" rx="14" ry="22" fill="#FFFFFF" stroke="' + C.bodyEdge + '" stroke-width="2.5" transform="rotate(-18 160 192)"/><path d="M166,178 v6 M159,176 v7" stroke="#E0D4C4" stroke-width="2" stroke-linecap="round"/></g>';
-    // 귀 + 머리
-    s += earG('earL', false) + earG('earR', true);
-    s += '<ellipse cx="120" cy="104" rx="54" ry="48" fill="' + C.head + '" stroke="' + C.edge + '" stroke-width="2.5"/>';
+    // 얼굴
+    var headD = 'M246,114 C246,90 262,84 278,86 C294,88 304,100 308,112 L334,128 C340,132 340,140 334,144 C326,150 308,148 296,146 C286,154 268,156 256,148 C246,140 244,126 246,114 Z';
+    s += '<path d="' + headD + '" fill="url(#gh' + id + ')" stroke="' + (brown ? C.headLo : C.line) + '" stroke-width="2.2" stroke-linejoin="round"/>';
     if (brown) {
-      s += '<path d="M110,56 Q120,50 130,56 L138,100 Q120,132 102,100 Z" fill="#FFFFFF"/>';                 // 이마 흰 줄
-      s += '<ellipse cx="90" cy="124" rx="23" ry="17" fill="#FFFFFF"/><ellipse cx="150" cy="124" rx="23" ry="17" fill="#FFFFFF"/>';
+      s += '<path d="M276,88 C284,85 292,88 294,96 C296,108 304,118 326,128 L336,132 C336,138 328,140 318,138 C300,134 290,128 284,118 C278,108 274,98 276,88 Z" fill="#FFFFFF"/>';   // 이마 흰 줄
+      s += '<path d="M296,134 C308,136 326,140 336,138 C340,146 324,152 304,150 C296,150 290,146 288,140 Z" fill="#FFFFFF"/>';                                                         // 흰 주둥이
     } else {
-      s += '<path d="M68,96 C64,70 82,56 106,60 C102,76 112,96 108,112 C88,122 70,114 68,96 Z" fill="' + C.patch + '" opacity=".9"/>';
-      s += '<path d="M172,96 C176,70 158,56 134,60 C138,76 128,96 132,112 C152,122 170,114 172,96 Z" fill="' + C.patch + '" opacity=".9"/>';
-      s += '<path d="M110,56 Q120,52 130,56 L134,100 Q120,116 106,100 Z" fill="#FFFDF8"/>';                 // 이마 흰 줄
+      s += '<path d="M248,114 C248,92 262,86 278,88 C288,89 296,93 301,100 C290,104 283,112 285,124 C272,124 256,134 250,126 C248,122 248,118 248,114 Z" fill="' + C.patchA + '" opacity=".95"/>';
+      s += '<ellipse cx="294" cy="112" rx="16" ry="15" fill="' + C.patchA + '" opacity=".75"/>';
+      s += '<path d="M276,88 C284,85 292,88 294,96 C296,108 304,118 326,128 L336,132 C336,138 328,140 318,138 C300,134 290,128 284,118 C278,108 274,98 276,88 Z" fill="#FFFDF8"/>';
+      s += '<path d="M296,134 C308,136 326,140 336,138 C340,146 324,152 304,150 C296,150 290,146 288,140 Z" fill="#FFFDF8"/>';
     }
-    s += '<ellipse cx="120" cy="125" rx="32" ry="26" fill="' + (brown ? '#FFFFFF' : '#FFFDF8') + '"/>';
-    // 눈썹 점, 눈, 볼
-    s += '<circle cx="99" cy="80" r="4" fill="' + C.brow + '"/><circle cx="141" cy="80" r="4" fill="' + C.brow + '"/>';
-    s += '<g class="eyes"><ellipse cx="99" cy="100" rx="9" ry="10.5" fill="' + C.eye + '"/><ellipse cx="141" cy="100" rx="9" ry="10.5" fill="' + C.eye + '"/>' +
-      '<circle cx="102.5" cy="95.5" r="3.6" fill="#fff"/><circle cx="144.5" cy="95.5" r="3.6" fill="#fff"/><circle cx="96" cy="105" r="1.7" fill="#fff"/><circle cx="138" cy="105" r="1.7" fill="#fff"/></g>';
-    s += '<circle cx="80" cy="122" r="8" fill="' + C.cheek + '" opacity=".5"/><circle cx="160" cy="122" r="8" fill="' + C.cheek + '" opacity=".5"/>';
-    // 입, 혀, 코
-    s += '<path d="M106,127 Q120,151 134,127 Z" fill="#8B2E3F"/>';
-    s += '<g class="tongue"><ellipse cx="120" cy="139" rx="8.5" ry="9" fill="#FF8FA3"/><path d="M120,132 v9" stroke="#E5667F" stroke-width="1.8" stroke-linecap="round"/></g>';
-    s += '<path d="M120,121 v6 M120,127 Q112,131 106,127 M120,127 Q128,131 134,127" fill="none" stroke="' + C.eye + '" stroke-width="2.4" stroke-linecap="round"/>';
-    s += '<ellipse cx="120" cy="117" rx="10.5" ry="7.5" fill="' + C.nose + '"/><ellipse cx="116.5" cy="114.5" rx="3.2" ry="1.9" fill="#fff" opacity=".7"/>';
-    s += '</svg>';
+    // 볼 술
+    s += '<path d="M258,146 L246,154 L257,156 L249,168 L263,162 L266,150 Z" fill="' + (brown ? 'url(#gh' + id + ')' : '#FFFFFF') + '" stroke="' + (brown ? C.headLo : C.line) + '" stroke-width="1.6" stroke-linejoin="round"/>';
+    // 눈, 눈썹 점
+    s += '<circle cx="298" cy="97" r="3.4" fill="' + C.brow + '"/>';
+    s += '<g class="eyes"><ellipse cx="294" cy="113" rx="8.6" ry="9.6" fill="' + C.eye + '"/><circle cx="297.5" cy="108.6" r="3.4" fill="#fff"/><circle cx="291" cy="117.5" r="1.6" fill="#fff"/></g>';
+    s += '<ellipse cx="282" cy="134" rx="8" ry="5.5" fill="#FF9DB1" opacity=".45"/>';
+    // 입 + 혀 + 코
+    s += '<path d="M334,144 C324,155 310,153 302,146 C312,147 324,147 334,144 Z" fill="#8B2E3F"/>';
+    s += '<g class="tongue"><path d="M314,149 C312,163 320,172 329,164 C332,158 330,152 328,149 Z" fill="#FF8FA3"/><path d="M321,152 v10" stroke="#E5667F" stroke-width="1.8" stroke-linecap="round"/></g>';
+    s += '<path d="M334,143 C326,150 312,150 304,145" fill="none" stroke="' + C.eye + '" stroke-width="2.2" stroke-linecap="round"/>';
+    s += '<ellipse cx="338" cy="133" rx="8.4" ry="7" fill="' + C.nose + '"/><ellipse cx="335.5" cy="130.5" rx="3" ry="1.8" fill="#fff" opacity=".6"/>';
+    // 가까운 쪽 귀
+    s += '<g class="earN">';
+    if (brown) {
+      s += '<path d="M276,98 C252,102 222,84 214,54 L202,48 C206,42 214,38 220,36 L216,24 C226,22 236,24 242,30 L244,16 C254,18 262,26 266,36 L274,26 C280,38 282,54 284,72 Z" fill="url(#ge' + id + ')" stroke="' + C.strand + '" stroke-width="2" stroke-linejoin="round"/>';
+      s += '<path d="M270,92 C252,94 234,80 228,60 C242,62 258,72 272,88 Z" fill="' + C.earIn + '" opacity=".95"/>';
+      s += '<path d="M214,58 C206,70 204,82 207,92 M224,64 C218,76 218,88 221,98 M236,72 C231,82 231,92 234,100" fill="none" stroke="' + C.strand + '" stroke-width="2.4" stroke-linecap="round" opacity=".75"/>';
+      s += '<path d="M222,34 C230,40 234,48 232,56 M244,24 C250,34 250,44 246,50" fill="none" stroke="#F8C48A" stroke-width="2" stroke-linecap="round" opacity=".8"/>';
+    } else {
+      s += '<path d="M262,100 C248,76 246,42 262,10 C286,28 300,58 296,94 Z" fill="url(#ge' + id + ')" stroke="' + C.line + '" stroke-width="2" stroke-linejoin="round"/>';
+      s += '<path d="M262,10 C272,16 278,26 284,38 C272,40 260,36 253,27 C256,20 258,15 262,10 Z" fill="' + C.patchA + '"/>';
+      s += '<path d="M268,90 C262,70 262,50 268,32 C282,48 288,68 286,90 Z" fill="' + C.earIn + '"/>';
+      s += '<path d="M262,98 l-9,6 l10,-1 M254,84 l-7,5 M296,92 l5,8" fill="none" stroke="' + C.strand + '" stroke-width="2" stroke-linecap="round" opacity=".7"/>';
+    }
+    s += '</g>';
+    s += '</g>';
+    s += '</g></svg>';
     return s;
   }
 
@@ -322,15 +362,15 @@
     var r = card && !card.closest('[hidden]') ? card.getBoundingClientRect() : { top: vh * 0.5, bottom: vh * 0.5, left: vw * 0.5, right: vw * 0.5 };
     var above = r.top, side = Math.min(r.left, vw - r.right), size, x, y;
     var top0 = Math.max(96, vh * 0.05 + 70);          // 응원 문구 아래부터
-    var room = above - top0 - 8;
+    var room = above - top0 - 8, AS = 0.8;
     if (room >= 150 || above >= side) {
-      size = Math.max(110, Math.min(300, room / 1.125, vw * 0.5));
-      x = vw / 2 - size / 2; y = top0 + Math.max(0, (room - size * 1.125) / 2);
+      size = Math.max(150, Math.min(420, room / AS, vw * 0.7));
+      x = vw / 2 - size / 2; y = top0 + Math.max(0, (room - size * AS) / 2);
     } else {
-      size = Math.max(120, Math.min(320, side - 20, vh * 0.5));
-      x = (r.left - size) / 2; y = vh / 2 - size / 2;
+      size = Math.max(150, Math.min(380, side - 16));
+      x = Math.max(4, (r.left - size) / 2); y = vh / 2 - size * AS / 2;
     }
-    dogEl.style.width = size + 'px'; dogEl.style.height = size * 1.125 + 'px';
+    dogEl.style.width = size + 'px'; dogEl.style.height = size * AS + 'px';
     dogEl.style.left = Math.round(x) + 'px'; dogEl.style.top = Math.round(y) + 'px';
   }
 
