@@ -125,10 +125,40 @@
 
   function tapNumber(n) {
     if (paused || !game || selected === null) return;
+    var before = game.isCompleted ? [] : G.completedUnits(game);
     var r = G.input(game, n, selected, notesMode);
     if (r === 'ignored') return;
+    if (r === 'blocked') { blockedFeedback(n, selected); return; }
     if (r === 'mistake') shake(selected);
     afterChange();
+    if (r === 'placed') pulseNewUnits(before);
+  }
+  // 메모 모드에서 같은 행/열/박스에 이미 확정된 숫자는 메모할 수 없음: 살짝 흔들고, 이미 있는 칸을 잠깐 알려 줌
+  var blkTimer = null;
+  function blockedFeedback(n, i) {
+    shake(i);
+    var b = G.notedBlockers(game, i, n);
+    b.forEach(function (j) { cellEls[j].classList.add('blk'); });
+    clearTimeout(blkTimer);
+    blkTimer = setTimeout(function () { cellEls.forEach(function (c) { c.classList.remove('blk'); }); }, 900);
+    toast('같은 줄·칸에 이미 ' + n + '이(가) 있어요');
+  }
+  // 행/열/박스를 하나 완성하면 해당 칸들이 물결처럼 살짝 반짝임 (게임 전체 완성 때는 큰 축하 효과가 대신함)
+  function pulseNewUnits(before) {
+    if (!game || game.isCompleted) return;
+    var after = G.completedUnits(game), seen = {};
+    after.forEach(function (u) {
+      if (before.indexOf(u) !== -1) return;
+      E.UNITS[u].forEach(function (ci, k) {
+        if (seen[ci] === undefined) seen[ci] = k;
+      });
+    });
+    Object.keys(seen).forEach(function (ci) {
+      var el = cellEls[ci];
+      el.style.setProperty('--pd', (seen[ci] * 55) + 'ms');
+      el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
+      setTimeout(function () { el.classList.remove('pop'); }, 1100 + seen[ci] * 55);
+    });
   }
   function shake(i) {
     var el = cellEls[i]; if (!el) return;
@@ -145,8 +175,9 @@
   }
   function doHint() {
     if (paused || !game) return;
+    var before = game.isCompleted ? [] : G.completedUnits(game);
     var i = G.hint(game, selected);
-    if (i !== null) { selected = i; afterChange(); }
+    if (i !== null) { selected = i; afterChange(); pulseNewUnits(before); }
   }
 
   function finishGame() {
@@ -159,6 +190,7 @@
     if (isNewRecord) stats.bestTimes[d] = time;
     saveStats(); unstore(GAME_KEY);
     renderDone(); $('done').hidden = false;
+    if (window.SudokuFX) { try { window.SudokuFX.play(); } catch (e) { /* 효과 실패는 게임에 영향 없음 */ } }
   }
   function renderDone() {
     var g = game, best = stats.bestTimes[g.difficulty];
@@ -169,6 +201,7 @@
     $('newRecord').hidden = !isNewRecord;
   }
   function leaveCompleted() {
+    if (window.SudokuFX) window.SudokuFX.stop();
     $('done').hidden = true; game = null; selected = null; paused = false;
     showMenu(false);
   }
@@ -244,7 +277,11 @@
         else if (selVal && v === selVal) cls += ' same';
         else if (E.row(i) === E.row(selected) || E.col(i) === E.col(selected) || E.box(i) === E.box(selected)) cls += ' peer';
       } else if (conf[i]) cls += ' conflict';
-      el.className = cls + (el.classList.contains('shake') ? ' shake' : '');
+      var keep = '';
+      if (el.classList.contains('shake')) keep += ' shake';
+      if (el.classList.contains('pop')) keep += ' pop';
+      if (el.classList.contains('blk')) keep += ' blk';
+      el.className = cls + keep;
       el.setAttribute('aria-label', (E.row(i) + 1) + '행 ' + (E.col(i) + 1) + '열 ' + (v ? v : '빈칸'));
     }
     $('diffName').textContent = E.DIFFICULTIES[game.difficulty].title;
@@ -347,9 +384,22 @@
   }
 
   if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+    var hadController = !!navigator.serviceWorker.controller, updatePending = false;
+    // 새 버전이 준비되면, 일시정지/메뉴 상태일 때 자동으로 새로고침 (게임은 자동 저장되어 그대로 이어짐)
+    navigator.serviceWorker.addEventListener('controllerchange', function () {
+      if (!hadController) { hadController = true; return; }
+      updatePending = true; maybeReload();
+    });
+    window.__maybeReload = maybeReload;
+    function maybeReload() {
+      if (!updatePending) return;
+      var idle = $('game').hidden || paused || !$('menu').hidden;
+      if (idle && $('done').hidden) { save(); location.reload(); }
+    }
+    document.addEventListener('visibilitychange', function () { if (document.hidden) setTimeout(maybeReload, 50); });
     window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
   }
 
   // 테스트/디버그용 (화면에는 영향 없음)
-  window.__sudoku = { get game() { return game; }, get selected() { return selected; }, get paused() { return paused; } };
+  window.__sudoku = { celebrate: function (o) { return window.SudokuFX.play(o); }, get game() { return game; }, get selected() { return selected; }, get paused() { return paused; } };
 })();

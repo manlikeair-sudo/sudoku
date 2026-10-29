@@ -35,6 +35,24 @@
     return c;
   }
 
+  // 같은 행/열/박스에서 숫자 n 이 이미 놓인 칸들
+  function notedBlockers(g, i, n) {
+    var out = [], p = PEERS[i];
+    for (var k = 0; k < p.length; k++) if (g.values[p[k]] === n) out.push(p[k]);
+    return out;
+  }
+
+  // 한 칸을 채웠을 때 새로 완성된 행/열/박스 목록 (UNITS 인덱스)
+  function completedUnits(g) {
+    var out = [];
+    for (var u = 0; u < E.UNITS.length; u++) {
+      var unit = E.UNITS[u], ok = true;
+      for (var k = 0; k < 9; k++) if (g.values[unit[k]] !== g.solution[unit[k]]) { ok = false; break; }
+      if (ok) out.push(u);
+    }
+    return out;
+  }
+
   function clearPeerNotes(g, i, n, changes) {
     var bit = 1 << (n - 1), p = PEERS[i];
     for (var k = 0; k < p.length; k++) {
@@ -51,11 +69,14 @@
     g.isCompleted = true;
   }
 
-  // 반환: 'ignored' | 'noted' | 'placed' | 'mistake' | 'erased'
+  // 반환: 'ignored' | 'noted' | 'blocked' | 'placed' | 'mistake' | 'erased'
   function input(g, n, i, notesMode) {
     if (!(n >= 1 && n <= 9) || !(i >= 0 && i < 81) || g.isCompleted || isLocked(g, i)) return 'ignored';
     if (notesMode) {
       if (g.values[i] !== 0) return 'ignored';
+      var nbit = 1 << (n - 1);
+      // 이미 있는 메모는 (같은 줄에 같은 숫자가 생겼더라도) 항상 끌 수 있고, 새 메모는 같은 행/열/박스에 확정된 숫자가 있으면 막는다.
+      if (!(g.notes[i] & nbit) && notedBlockers(g, i, n).length) return 'blocked';
       g.undoStack.push({ changes: [{ index: i, value: 0, notes: g.notes[i] }] });
       g.notes[i] ^= (1 << (n - 1));
       return 'noted';
@@ -129,7 +150,7 @@
 
   var api = {
     newGame: newGame, isGiven: isGiven, isLocked: isLocked, isWrong: isWrong, conflicts: conflicts,
-    placedCount: placedCount, input: input, erase: erase, undo: undo, hint: hint,
+    placedCount: placedCount, notedBlockers: notedBlockers, completedUnits: completedUnits, input: input, erase: erase, undo: undo, hint: hint,
     formatTime: formatTime, validSaved: validSaved
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
