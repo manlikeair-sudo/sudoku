@@ -1,8 +1,8 @@
 /* 오프라인용 서비스 워커: 앱 파일을 캐시해 두고 네트워크 없이도 열리게 합니다. */
-var CACHE = 'sudoku-v4';
+var CACHE = 'sudoku-v5';
 var FILES = [
   './', './index.html', './style.css', './engine.js', './game.js', './effects.js', './app.js',
-  './manifest.json', './icons/apple-touch-icon.png', './icons/icon-192.png', './icons/icon-512.png'
+  './manifest.json', './dogs/dog-white.webp', './dogs/dog-white.png', './dogs/dog-brown.webp', './dogs/dog-brown.png', './icons/apple-touch-icon.png', './icons/icon-192.png', './icons/icon-512.png'
 ];
 
 self.addEventListener('install', function (e) {
