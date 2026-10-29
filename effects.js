@@ -232,49 +232,85 @@
   }
 
   // ---- 강아지 (SVG) ----
+  // brown: 흰 몸 + 진한 캐러멜 오렌지 얼굴·등무늬, 이마 흰 줄, 술 달린 큰 귀, 풍성한 흰 꼬리
+  // white: 크림 화이트 + 눈가·귀 끝 연한 피치, 뾰족하게 선 귀, 갈색빛 분홍 코, 동그랗게 말린 꼬리
   function dogSVG(kind) {
     var brown = kind === 'brown';
-    var ear = brown ? '#A5622F' : '#FFFFFF', earEdge = brown ? '#7C4520' : '#CFCFDC', earIn = brown ? '#F2CDB5' : '#FFD9E0';
-    var head = brown ? '#A5622F' : '#FFFFFF', line = brown ? '#7C4520' : '#CFCFDC', body = '#FFFFFF';
-    var earPath = 'M90,70 C70,80 38,74 22,48 Q10,44 14,36 Q4,30 12,22 Q6,14 18,10 Q20,2 32,6 Q38,4 44,12 C62,22 78,40 92,56 Z';
-    var earInner = 'M86,64 C70,70 46,64 32,44 Q26,32 34,24 Q42,22 50,32 C64,42 76,50 86,60 Z';
-    function earG(id, flip) {
-      return '<g class="' + id + '"' + (flip ? ' transform="translate(240,0) scale(-1,1)"' : '') + '>' +
-        '<g class="earflap"><g transform="translate(90 62) scale(1.12 1.22) translate(-90 -62)">' +
-        '<path d="' + earPath + '" fill="' + ear + '" stroke="' + earEdge + '" stroke-width="2.5" stroke-linejoin="round"/>' +
-        '<path d="' + earInner + '" fill="' + earIn + '" opacity=".9"/>' +
-        '<path d="M16,30 Q26,24 30,34 M22,16 Q32,16 36,24 M30,8 Q40,10 42,18" fill="none" stroke="' + earEdge + '" stroke-width="2" stroke-linecap="round" opacity=".55"/>' +
-        '</g></g></g>';
+    var C = brown ? {
+      fur: '#D98A34', edge: '#A9611F', inner: '#F7D6AE', fringe: '#B8702A', head: '#D98A34',
+      body: '#FFFFFF', bodyEdge: '#E3D6C6', patch: '#D98A34', brow: '#F2B877', nose: '#1E1A1E', eye: '#241A18', cheek: '#FFB3C7'
+    } : {
+      fur: '#FFFAF1', edge: '#E3CFB4', inner: '#F8C9C4', fringe: '#EBD7BC', head: '#FFFAF1',
+      body: '#FFFAF1', bodyEdge: '#E8D8C2', patch: '#F0CBA0', brow: '#F0CBA0', nose: '#7C5250', eye: '#2E1B17', cheek: '#FFB3BF'
+    };
+    function earG(cls, flip) {
+      var inner;
+      if (brown) {
+        var ep = 'M90,70 C70,80 38,74 22,48 Q10,44 14,36 Q4,30 12,22 Q6,14 18,10 Q20,2 32,6 Q38,4 44,12 C62,22 78,40 92,56 Z';
+        inner = '<g transform="translate(90 62) scale(1.12 1.22) translate(-90 -62)">' +
+          '<path d="' + ep + '" fill="' + C.fur + '" stroke="' + C.edge + '" stroke-width="2.5" stroke-linejoin="round"/>' +
+          '<path d="M86,64 C70,70 46,64 32,44 Q26,32 34,24 Q42,22 50,32 C64,42 76,50 86,60 Z" fill="' + C.inner + '" opacity=".92"/>' +
+          '<path d="M16,34 Q24,28 30,36 M20,20 Q30,18 36,26 M30,9 Q40,11 43,19 M22,52 Q30,52 36,58" fill="none" stroke="' + C.fringe + '" stroke-width="2.2" stroke-linecap="round" opacity=".7"/>' +
+          '</g>';
+      } else {
+        inner = '<path d="M70,94 C54,72 38,42 42,16 Q44,6 54,12 C82,24 104,44 112,66 Z" fill="' + C.fur + '" stroke="' + C.edge + '" stroke-width="2.5" stroke-linejoin="round"/>' +
+          '<path d="M42,16 Q44,6 54,12 C64,17 72,24 78,32 C66,36 52,32 43,24 Z" fill="' + C.patch + '" opacity=".95"/>' +
+          '<path d="M58,36 C60,54 74,68 94,74 C84,56 76,46 66,34 Z" fill="' + C.inner + '"/>' +
+          '<path d="M52,22 C56,30 60,34 66,38 M60,26 C64,34 70,40 76,44" fill="none" stroke="#EBB9B2" stroke-width="1.6" stroke-linecap="round" opacity=".7"/>' +
+          '<path d="M50,52 q-6,4 -4,10 M60,64 q-6,4 -3,10" fill="none" stroke="' + C.fringe + '" stroke-width="2" stroke-linecap="round" opacity=".6"/>';
+      }
+      return '<g class="' + cls + '"' + (flip ? ' transform="translate(240,0) scale(-1,1)"' : '') + '><g class="earflap">' + inner + '</g></g>';
     }
     var s = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 270" class="dogsvg" aria-hidden="true">';
+    // 꼬리 (뒤쪽, 풍성하게)
+    s += '<g class="tail">';
+    if (brown) {
+      s += '<path d="M168,214 C196,214 226,186 222,146 C220,128 208,116 198,126 C204,150 196,176 172,186 Z" fill="#FFFFFF" stroke="' + C.bodyEdge + '" stroke-width="2.5" stroke-linejoin="round"/>' +
+           '<path d="M214,140 q-2,-12 -10,-12 M208,162 q8,-8 8,-18 M196,180 q10,-6 12,-16" fill="none" stroke="#EADFD0" stroke-width="2.2" stroke-linecap="round"/>';
+    } else {
+      s += '<path d="M168,216 C202,218 226,192 214,160 C208,144 192,142 190,156 C196,166 192,180 174,190 Z" fill="' + C.body + '" stroke="' + C.bodyEdge + '" stroke-width="2.5" stroke-linejoin="round"/>' +
+           '<path d="M212,168 q-8,2 -12,10 M200,186 q8,-2 12,-8" fill="none" stroke="#EFE0CB" stroke-width="2.2" stroke-linecap="round"/>';
+    }
+    s += '</g>';
     // 몸
     s += '<g class="dbody">';
-    s += '<ellipse cx="120" cy="204" rx="52" ry="52" fill="' + (brown ? '#A5622F' : body) + '" stroke="' + line + '" stroke-width="2.5"/>';
-    s += '<ellipse cx="120" cy="214" rx="32" ry="40" fill="#FFFFFF"/>';
-    s += '<path d="M96,190 q6,10 12,0 q6,10 12,0 q6,10 12,0 q6,10 12,0" fill="none" stroke="#E4E4EE" stroke-width="2.5" stroke-linecap="round"/>';
+    s += '<ellipse cx="120" cy="206" rx="54" ry="52" fill="' + C.body + '" stroke="' + C.bodyEdge + '" stroke-width="2.5"/>';
+    s += '<clipPath id="bc-' + kind + '"><ellipse cx="120" cy="206" rx="54" ry="52"/></clipPath><g clip-path="url(#bc-' + kind + ')">';
+    if (brown) {
+      s += '<path d="M60,170 C84,176 98,196 96,222 C94,240 84,252 66,258 L60,258 Z" fill="' + C.patch + '"/>' +
+           '<path d="M180,170 C156,176 142,196 144,222 C146,240 156,252 174,258 L180,258 Z" fill="' + C.patch + '"/>';
+    } else {
+      s += '<path d="M60,176 C80,184 90,204 88,226 C86,240 78,250 66,254 L60,254 Z" fill="' + C.patch + '" opacity=".55"/>';
+    }
+    s += '</g>';
+    s += '<ellipse cx="120" cy="218" rx="30" ry="38" fill="#FFFFFF" opacity="' + (brown ? 1 : .55) + '"/>';
+    s += '<path d="M94,190 q6,10 13,0 q6,10 13,0 q6,10 13,0 q6,10 13,0" fill="none" stroke="#E6DCCD" stroke-width="2.5" stroke-linecap="round"/>';
     s += '</g>';
     // 박수 치는 앞발
-    s += '<g class="pawL"><ellipse cx="80" cy="190" rx="14" ry="22" fill="#FFFFFF" stroke="' + line + '" stroke-width="2.5" transform="rotate(18 80 190)"/><path d="M74,176 v6 M81,174 v7" stroke="#E0E0EA" stroke-width="2" stroke-linecap="round"/></g>';
-    s += '<g class="pawR"><ellipse cx="160" cy="190" rx="14" ry="22" fill="#FFFFFF" stroke="' + line + '" stroke-width="2.5" transform="rotate(-18 160 190)"/><path d="M166,176 v6 M159,174 v7" stroke="#E0E0EA" stroke-width="2" stroke-linecap="round"/></g>';
+    s += '<g class="pawL"><ellipse cx="80" cy="192" rx="14" ry="22" fill="#FFFFFF" stroke="' + C.bodyEdge + '" stroke-width="2.5" transform="rotate(18 80 192)"/><path d="M74,178 v6 M81,176 v7" stroke="#E0D4C4" stroke-width="2" stroke-linecap="round"/></g>';
+    s += '<g class="pawR"><ellipse cx="160" cy="192" rx="14" ry="22" fill="#FFFFFF" stroke="' + C.bodyEdge + '" stroke-width="2.5" transform="rotate(-18 160 192)"/><path d="M166,178 v6 M159,176 v7" stroke="#E0D4C4" stroke-width="2" stroke-linecap="round"/></g>';
     // 귀 + 머리
     s += earG('earL', false) + earG('earR', true);
-    s += '<ellipse cx="120" cy="104" rx="54" ry="48" fill="' + head + '" stroke="' + line + '" stroke-width="2.5"/>';
+    s += '<ellipse cx="120" cy="104" rx="54" ry="48" fill="' + C.head + '" stroke="' + C.edge + '" stroke-width="2.5"/>';
     if (brown) {
-      s += '<path d="M112,58 Q120,52 128,58 L134,104 Q120,128 106,104 Z" fill="#FFFFFF"/>';           // 이마 흰 줄
-      s += '<ellipse cx="90" cy="122" rx="22" ry="17" fill="#FFFFFF"/><ellipse cx="150" cy="122" rx="22" ry="17" fill="#FFFFFF"/>';
+      s += '<path d="M110,56 Q120,50 130,56 L138,100 Q120,132 102,100 Z" fill="#FFFFFF"/>';                 // 이마 흰 줄
+      s += '<ellipse cx="90" cy="124" rx="23" ry="17" fill="#FFFFFF"/><ellipse cx="150" cy="124" rx="23" ry="17" fill="#FFFFFF"/>';
+    } else {
+      s += '<path d="M68,96 C64,70 82,56 106,60 C102,76 112,96 108,112 C88,122 70,114 68,96 Z" fill="' + C.patch + '" opacity=".9"/>';
+      s += '<path d="M172,96 C176,70 158,56 134,60 C138,76 128,96 132,112 C152,122 170,114 172,96 Z" fill="' + C.patch + '" opacity=".9"/>';
+      s += '<path d="M110,56 Q120,52 130,56 L134,100 Q120,116 106,100 Z" fill="#FFFDF8"/>';                 // 이마 흰 줄
     }
-    s += '<ellipse cx="120" cy="124" rx="31" ry="25" fill="#FFFFFF"/>';
-    if (!brown) s += '<path d="M104,62 q16,-8 32,0" fill="none" stroke="#E6E6EF" stroke-width="3" stroke-linecap="round"/>';
-    // 눈썹 점(황갈색), 눈, 볼
-    s += '<circle cx="100" cy="82" r="4" fill="' + (brown ? '#E8B07A' : '#EFE3D6') + '"/><circle cx="140" cy="82" r="4" fill="' + (brown ? '#E8B07A' : '#EFE3D6') + '"/>';
-    s += '<g class="eyes"><ellipse cx="100" cy="100" rx="7.5" ry="10" fill="#2A2530"/><ellipse cx="140" cy="100" rx="7.5" ry="10" fill="#2A2530"/>' +
-      '<circle cx="102.5" cy="96" r="3" fill="#fff"/><circle cx="142.5" cy="96" r="3" fill="#fff"/><circle cx="98" cy="104" r="1.4" fill="#fff"/><circle cx="138" cy="104" r="1.4" fill="#fff"/></g>';
-    s += '<circle cx="82" cy="120" r="8" fill="#FFB3C7" opacity=".55"/><circle cx="158" cy="120" r="8" fill="#FFB3C7" opacity=".55"/>';
-    // 코, 입, 혀
-    s += '<path d="M106,126 Q120,150 134,126 Z" fill="#8B2E3F"/>';
-    s += '<g class="tongue"><ellipse cx="120" cy="138" rx="8" ry="8.5" fill="#FF8FA3"/><path d="M120,132 v8" stroke="#E5667F" stroke-width="1.8" stroke-linecap="round"/></g>';
-    s += '<path d="M120,120 v6 M120,126 Q112,130 106,126 M120,126 Q128,130 134,126" fill="none" stroke="#2A2530" stroke-width="2.4" stroke-linecap="round"/>';
-    s += '<ellipse cx="120" cy="116" rx="9.5" ry="7" fill="#2A2530"/><ellipse cx="116.5" cy="113.5" rx="3" ry="1.8" fill="#fff" opacity=".7"/>';
+    s += '<ellipse cx="120" cy="125" rx="32" ry="26" fill="' + (brown ? '#FFFFFF' : '#FFFDF8') + '"/>';
+    // 눈썹 점, 눈, 볼
+    s += '<circle cx="99" cy="80" r="4" fill="' + C.brow + '"/><circle cx="141" cy="80" r="4" fill="' + C.brow + '"/>';
+    s += '<g class="eyes"><ellipse cx="99" cy="100" rx="9" ry="10.5" fill="' + C.eye + '"/><ellipse cx="141" cy="100" rx="9" ry="10.5" fill="' + C.eye + '"/>' +
+      '<circle cx="102.5" cy="95.5" r="3.6" fill="#fff"/><circle cx="144.5" cy="95.5" r="3.6" fill="#fff"/><circle cx="96" cy="105" r="1.7" fill="#fff"/><circle cx="138" cy="105" r="1.7" fill="#fff"/></g>';
+    s += '<circle cx="80" cy="122" r="8" fill="' + C.cheek + '" opacity=".5"/><circle cx="160" cy="122" r="8" fill="' + C.cheek + '" opacity=".5"/>';
+    // 입, 혀, 코
+    s += '<path d="M106,127 Q120,151 134,127 Z" fill="#8B2E3F"/>';
+    s += '<g class="tongue"><ellipse cx="120" cy="139" rx="8.5" ry="9" fill="#FF8FA3"/><path d="M120,132 v9" stroke="#E5667F" stroke-width="1.8" stroke-linecap="round"/></g>';
+    s += '<path d="M120,121 v6 M120,127 Q112,131 106,127 M120,127 Q128,131 134,127" fill="none" stroke="' + C.eye + '" stroke-width="2.4" stroke-linecap="round"/>';
+    s += '<ellipse cx="120" cy="117" rx="10.5" ry="7.5" fill="' + C.nose + '"/><ellipse cx="116.5" cy="114.5" rx="3.2" ry="1.9" fill="#fff" opacity=".7"/>';
     s += '</svg>';
     return s;
   }

@@ -180,7 +180,9 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 2; stroke-
   0% { transform: translateY(0) rotateY(0); } 30% { transform: translateY(-34px) rotateY(180deg); } 55% { transform: translateY(0) rotateY(360deg); }
   64% { transform: translateY(-12px) rotate(-6deg); } 74% { transform: translateY(0) rotate(5deg); } 84% { transform: translateY(-12px) rotate(-5deg); } 100% { transform: translateY(0) rotate(0); }
 }
-.dogsvg .pawL, .dogsvg .pawR, .dogsvg .earflap, .dogsvg .tongue { transform-box: view-box; }
+.dogsvg .pawL, .dogsvg .pawR, .dogsvg .earflap, .dogsvg .tongue, .dogsvg .tail { transform-box: view-box; }
+.dogsvg .tail { transform-origin: 170px 205px; animation: tailWag .45s ease-in-out infinite alternate; }
+@keyframes tailWag { from { transform: rotate(-7deg); } to { transform: rotate(9deg); } }
 .dogsvg .pawL { animation: clapL .36s ease-in-out infinite alternate; }
 .dogsvg .pawR { animation: clapR .36s ease-in-out infinite alternate; }
 @keyframes clapL { from { transform: translateX(0) rotate(0); } to { transform: translateX(24px) rotate(10deg); } }
@@ -194,7 +196,7 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 2; stroke-
   .fxDog { animation: fxIn .8s ease-out both; }
   .fxDog .dogspin { animation: dogBob 4s ease-in-out infinite; }
   @keyframes dogBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
-  .dogsvg .pawL, .dogsvg .pawR, .dogsvg .earflap, .dogsvg .tongue { animation: none !important; }
+  .dogsvg .pawL, .dogsvg .pawR, .dogsvg .earflap, .dogsvg .tongue, .dogsvg .tail { animation: none !important; }
   .fxCheer { animation: fxIn .8s ease-out both; }
 }
 #fx.rm .fxDog .dogspin { animation: dogBob 4s ease-in-out infinite; }
