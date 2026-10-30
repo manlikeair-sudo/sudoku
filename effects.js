@@ -3,13 +3,19 @@
   'use strict';
   var IDX_KEY = 'sudoku.fx.idx', DOG_KEY = 'sudoku.fx.dog', DOGN_KEY = 'sudoku.fx.dogn';
   var BOTH_EVERY = 5;                                   // 강아지 순서 5번에 1번은 두 마리가 함께
-  // 완료할 때마다 순서대로 돌아가며 보여 줍니다. 강아지는 2번에 1번, 갈색/흰색이 번갈아 나옵니다.
+  // 완료할 때마다 순서대로 돌아가며 보여 줍니다. 강아지는 2번에 1번, 토리(갈색)/캐피(흰색)가 번갈아 나옵니다.
   var SEQ = ['fireworks', 'dog', 'confetti', 'dog', 'balloons', 'dog', 'stars', 'dog'];
   var EXTRAS = [];                                      // 모험 선물로 열린 효과 (adventure.js 가 setExtras 로 알려 줌)
   var EXTRA_CHEER = { petals: '꽃길만 걸어요 🌸', paws: '발자국 총총 🐾', bubbles: '퐁퐁 축하해요 🫧', snow: '눈꽃처럼 반짝! ❄️', fireflies: '반딧불이 반짝반짝 ✨' };
   function fullSeq() { var s = SEQ.slice(); EXTRAS.forEach(function (e) { s.push(e, 'dog'); }); return s; }
   var CHEERS = ['완성! 최고예요 🎉', '정말 잘했어요! 👏', '대단해요! ✨', '오늘도 해냈어요! 🌷'];
-  var DOG_CHEER = '완성이에요! 멍멍 🐶💕';
+  // 강아지 이름: 갈색 = 토리, 하양 = 캐피 (둘 다 받침 없음 → 가/와)
+  var DOG_NAME = { brown: '토리', white: '캐피' };
+  var DOG_CHEERS = {
+    brown: ['토리가 축하해요! 🐶💕', '토리가 신났어요! 🐾', '토리가 꼬리를 흔들어요! 🐶'],
+    white: ['캐피가 축하해요! 🐶💕', '캐피가 신났어요! 🐾', '캐피가 꼬리를 흔들어요! 🐶'],
+    both: ['토리와 캐피가 축하해요! 🐶🐶💕', '토리와 캐피가 함께 신났어요! 🐾']
+  };
   var PASTEL = ['#FFB3C7', '#FFD3A5', '#FFF1A8', '#BDF2C8', '#A5EDF7', '#A9C8FF', '#CDBFFF', '#FFC8F2'];
   var GOLD = ['#FFE08A', '#FFF3B0', '#FFD1E8', '#CDEBFF', '#FFFFFF'];
   var SPR = {};
@@ -358,7 +364,7 @@
     return '<div class="fxDog ' + kind + '" data-dog="' + kind + '" data-side="' + side + '" style="--ex:' + (side === 'left' ? '-95vw' : '95vw') + ';--ad:' + (delay || 0) + 's">' +
       '<div class="dogshadow"></div><div class="dogspin"><div class="dogwig"><picture>' +
       '<source type="image/webp" srcset="dogs/dog-' + kind + '.webp">' +
-      '<img class="dogimg" src="dogs/dog-' + kind + '.png" alt="" draggable="false"></picture></div></div></div>';
+      '<img class="dogimg" src="dogs/dog-' + kind + '.png" alt="' + (DOG_NAME[kind] || '') + '" draggable="false"></picture></div></div></div>';
   }
   function dogKinds(which) { return which === 'both' ? ['white', 'brown'] : [which]; }
   function preload() {
@@ -411,7 +417,7 @@
     layer.className = RM ? 'rm' : '';
     canvas = document.createElement('canvas'); layer.appendChild(canvas);
     var cheer = document.createElement('div'); cheer.className = 'fxCheer';
-    cheer.textContent = pickd.effect === 'dog' ? DOG_CHEER : (EXTRA_CHEER[pickd.effect] || CHEERS[(pickd.index || 0) % CHEERS.length]);
+    cheer.textContent = pickd.effect === 'dog' ? pick(DOG_CHEERS[pickd.dog] || DOG_CHEERS.brown) : (EXTRA_CHEER[pickd.effect] || CHEERS[(pickd.index || 0) % CHEERS.length]);
     layer.appendChild(cheer);
     app.appendChild(layer);
     ctx = canvas.getContext('2d'); resize();

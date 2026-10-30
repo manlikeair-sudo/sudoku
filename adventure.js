@@ -11,6 +11,7 @@
   function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
 
   // =============================================================== 데이터
+  var DOG_NAME = { brown: '토리', white: '캐피' };
   var DOG = { brown: 'dogs/dog-brown.webp', white: 'dogs/dog-white.webp' };
 
   // 난이도 곡선: [쉬움 마지막 레벨, 보통 마지막 레벨] (그 뒤는 어려움). 전문가 난이도는 모험에서 쓰지 않아요.
@@ -19,16 +20,16 @@
   var DIFF_KO = { easy: '쉬움', medium: '보통', hard: '어려움', expert: '전문가' };
 
   var STICKERS = {
-    s1: { name: '산책 나온 갈색이', dogs: ['brown'], emo: '🌼', bg: ['#C8F0C0', '#8ED88F'] },
-    s2: { name: '꽃길 하양이', dogs: ['white'], emo: '🌷', bg: ['#FFE0EC', '#FFB7D0'] },
-    s3: { name: '샌드위치 한 입', dogs: ['brown'], emo: '🥪', bg: ['#FFF0C2', '#FFD27A'] },
-    s4: { name: '피크닉 하양이', dogs: ['white'], emo: '🧺', bg: ['#FFE3D3', '#FFB99A'] },
-    s5: { name: '튜브 탄 갈색이', dogs: ['brown'], emo: '🏖️', bg: ['#C9F0FF', '#7DD6EE'] },
-    s6: { name: '조개 줍는 하양이', dogs: ['white'], emo: '🐚', bg: ['#D8F4F4', '#9FE0E2'] },
-    s7: { name: '눈사람 친구', dogs: ['brown'], emo: '⛄', bg: ['#E4EEFF', '#B7CFF7'] },
-    s8: { name: '목도리 하양이', dogs: ['white'], emo: '🧣', bg: ['#EBE3FF', '#C7B8F5'] },
-    s9: { name: '따뜻한 우리 집', dogs: ['brown'], emo: '🏠', bg: ['#FFE8C6', '#FFC98C'] },
-    s10: { name: '둘이 함께 쏙', dogs: ['brown', 'white'], emo: '💕', bg: ['#FFD9E6', '#FFA9C8'] }
+    s1: { name: '산책 나온 토리', dogs: ['brown'], emo: '🌼', bg: ['#C8F0C0', '#8ED88F'] },
+    s2: { name: '꽃길 산책 캐피', dogs: ['white'], emo: '🌷', bg: ['#FFE0EC', '#FFB7D0'] },
+    s3: { name: '샌드위치 토리', dogs: ['brown'], emo: '🥪', bg: ['#FFF0C2', '#FFD27A'] },
+    s4: { name: '피크닉 온 캐피', dogs: ['white'], emo: '🧺', bg: ['#FFE3D3', '#FFB99A'] },
+    s5: { name: '튜브 탄 토리', dogs: ['brown'], emo: '🏖️', bg: ['#C9F0FF', '#7DD6EE'] },
+    s6: { name: '조개 줍는 캐피', dogs: ['white'], emo: '🐚', bg: ['#D8F4F4', '#9FE0E2'] },
+    s7: { name: '눈사람과 토리', dogs: ['brown'], emo: '⛄', bg: ['#E4EEFF', '#B7CFF7'] },
+    s8: { name: '목도리 두른 캐피', dogs: ['white'], emo: '🧣', bg: ['#EBE3FF', '#C7B8F5'] },
+    s9: { name: '집에 온 토리', dogs: ['brown'], emo: '🏠', bg: ['#FFE8C6', '#FFC98C'] },
+    s10: { name: '토리와 캐피', dogs: ['brown', 'white'], emo: '💕', bg: ['#FFD9E6', '#FFA9C8'] }
   };
   var EFFECT_INFO = {
     petals: { name: '꽃잎 날리기', emo: '🌸' }, paws: { name: '발자국 총총', emo: '🐾' }, bubbles: { name: '비눗방울', emo: '🫧' },
@@ -56,11 +57,11 @@
 
   // 장마다 선물 4개: 레벨 4 = 스티커, 8 = 새 축하 효과, 12 = 스티커, 20 = 보드 색
   var CHAPTERS = [
-    { name: '공원 산책', desc: '햇살 좋은 날, 갈색이와 산책해요', fx: 'petals', theme: 'mint', st: ['s1', 's2'], seeds: [[70, 60], [80, 330], [570, 70], [580, 330], [320, 215, 11000]] },
-    { name: '꽃밭 소풍', desc: '하양이와 도시락 소풍', fx: 'paws', theme: 'peach', st: ['s3', 's4'], seeds: [[580, 330], [70, 70], [570, 70], [80, 330], [330, 220, 11000]] },
-    { name: '바닷가', desc: '파도 소리 들리는 바닷가', fx: 'bubbles', theme: 'sea', st: ['s5', 's6'], seeds: [[320, 50], [60, 330], [580, 60], [200, 270], [480, 290, 11000]] },
-    { name: '눈 오는 날', desc: '눈사람과 함께 놀아요', fx: 'snow', theme: 'lav', st: ['s7', 's8'], seeds: [[70, 60], [70, 340], [560, 70], [560, 320], [260, 230, 11000]] },
-    { name: '우리 집', desc: '포근한 우리 집, 모두 모였어요', fx: 'fireflies', theme: 'rose', st: ['s9', 's10'], seeds: [[60, 60], [60, 340], [580, 70], [230, 260], [430, 270, 11000]] }
+    { name: '공원 산책', desc: '햇살 좋은 날, 토리와 산책해요', who: '토리', fx: 'petals', theme: 'mint', st: ['s1', 's2'], seeds: [[70, 60], [80, 330], [570, 70], [580, 330], [320, 215, 11000]] },
+    { name: '꽃밭 소풍', desc: '캐피와 도시락 소풍', who: '캐피', fx: 'paws', theme: 'peach', st: ['s3', 's4'], seeds: [[580, 330], [70, 70], [570, 70], [80, 330], [330, 220, 11000]] },
+    { name: '바닷가', desc: '파도 소리 들리는 바닷가, 토리와 캐피', who: '토리와 캐피', fx: 'bubbles', theme: 'sea', st: ['s5', 's6'], seeds: [[320, 50], [60, 330], [580, 60], [200, 270], [480, 290, 11000]] },
+    { name: '눈 오는 날', desc: '토리와 캐피가 눈사람과 놀아요', who: '토리와 캐피', fx: 'snow', theme: 'lav', st: ['s7', 's8'], seeds: [[70, 60], [70, 340], [560, 70], [560, 320], [260, 230, 11000]] },
+    { name: '우리 집', desc: '포근한 우리 집, 토리와 캐피도 함께', who: '토리와 캐피', fx: 'fireflies', theme: 'rose', st: ['s9', 's10'], seeds: [[60, 60], [60, 340], [580, 70], [230, 260], [430, 270, 11000]] }
   ];
   function rewardFor(c, l) {
     var ch = CHAPTERS[c - 1], i = MILES.indexOf(l);
@@ -214,10 +215,10 @@
   // 스티커
   function stickerHTML(id, size, locked) {
     var s = STICKERS[id], face = '';
-    if (locked) return '<div class="stk lock" style="--s:' + size + 'px"><div class="stkFace"><b>?</b></div></div>';
+    if (locked) return '<div class="stk lock" style="--s:' + size + 'px" role="img" aria-label="아직 못 받은 스티커"><div class="stkFace"><b>?</b></div></div>';
     if (s.dogs.length === 1) face = '<i style="background-image:url(' + DOG[s.dogs[0]] + ')"></i>';
     else face = '<i class="l" style="background-image:url(' + DOG[s.dogs[0]] + ')"></i><i class="r" style="background-image:url(' + DOG[s.dogs[1]] + ')"></i>';
-    return '<div class="stk" style="--s:' + size + 'px"><div class="stkFace" style="background:linear-gradient(160deg,' + s.bg[0] + ',' + s.bg[1] + ')">' + face + '</div><span class="stkEmo">' + s.emo + '</span></div>';
+    return '<div class="stk" role="img" aria-label="스티커: ' + esc(s.name) + '" style="--s:' + size + 'px"><div class="stkFace" style="background:linear-gradient(160deg,' + s.bg[0] + ',' + s.bg[1] + ')">' + face + '</div><span class="stkEmo">' + s.emo + '</span></div>';
   }
 
   // =============================================================== 저장
@@ -311,7 +312,7 @@
     var pendSet = {}; S.pend.forEach(function (p) { if (p.c === c && MILES.indexOf(p.l) >= 0) pendSet[p.l] = true; });
     var done = S.cleared[c - 1];
     // 그림 + 덮개 (덮개는 아직 안 열린 조각만; 막 열릴 조각은 'pre' 로 먼저 보여 줌)
-    var pic = '<div class="advPic">' + sceneSVG(c) + coversSVG(c, function (m) { return locked || m > done || pendSet[m]; }, pendSet) +
+    var pic = '<div class="advPic" role="img" aria-label="' + esc(c + '장 ' + CHAPTERS[c - 1].name + ' 그림 — ' + CHAPTERS[c - 1].who) + '">' + sceneSVG(c) + coversSVG(c, function (m) { return locked || m > done || pendSet[m]; }, pendSet) +
       (locked ? '<div class="advLock"><b>🔒</b><span>' + (c - 1) + '장을 끝내면 열려요</span></div>' : '') + '</div>';
     // 진행 막대
     var gifts = MILES.map(function (m) {
@@ -413,7 +414,7 @@
     setTimeout(function () { if (g.parentNode) g.parentNode.removeChild(g); }, 2200);
   }
   function banner(c, done) {
-    var el = $('advBanner'); el.innerHTML = '<div class="bnCard"><div class="bnBig">🖼️</div><h3>' + c + '장 그림 완성!</h3><p>' + (c < 5 ? '다음 장이 열렸어요' : '모든 모험을 마쳤어요 🎉') + '</p><button class="primary pill" id="bnOk">좋아요</button></div>';
+    var el = $('advBanner'); el.innerHTML = '<div class="bnCard"><div class="bnBig">🖼️</div><h3>' + c + '장 그림 완성!</h3><p>' + (c < 5 ? '다음 장이 열렸어요' : '토리와 캐피랑 모든 모험을 마쳤어요 🎉') + '</p><button class="primary pill" id="bnOk">좋아요</button></div>';
     el.hidden = false;
     $('bnOk').onclick = function () { el.hidden = true; done(); };
     if (window.SudokuFX) try { SudokuFX.play({ effect: 'stars' }); } catch (e) {}
