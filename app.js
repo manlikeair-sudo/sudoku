@@ -40,6 +40,7 @@
     var bg = getComputedStyle(root).getPropertyValue('--bg').trim();
     var meta = document.querySelector('meta[name="theme-color"]');
     if (meta && bg) meta.setAttribute('content', bg);
+    if (window.SudokuAdv) window.SudokuAdv.applyBoard();
     var segs = $('themeSeg').children;
     for (var i = 0; i < segs.length; i++) {
       var on = segs[i].getAttribute('data-v') === m;
@@ -98,25 +99,35 @@
   window.addEventListener('pagehide', pause);
 
   // ---- 새 게임 ----
-  function startNewGame(diff) {
+  function startNewGame(diff, adv) {
     if (busy) return;
     busy = true; $('busy').hidden = false;
     setTimeout(function () {   // 안내 문구가 먼저 그려지도록 한 박자 쉼
       var g;
       try { g = G.newGame(diff); } catch (e) { busy = false; $('busy').hidden = true; toast('퍼즐을 만들지 못했어요'); return; }
+      if (adv) g.adv = { c: adv.c, l: adv.l };
       game = g; selected = null; notesMode = false; elapsedMs = 0; lastTick = 0; lastSaveSec = 0;
-      isNewRecord = false; menuOpenInGame = false; paused = false;
+      isNewRecord = false; menuOpenInGame = false; paused = false; doneInfo = null;
       $('done').hidden = true; $('menu').hidden = true; $('game').hidden = false;
+      if (window.SudokuAdv) window.SudokuAdv.close();
       startTimer(); save();
       busy = false; $('busy').hidden = true;
       layout(); render();
     }, 30);
   }
 
-  var pendingDiff = null;
-  function requestNewGame(diff) {
-    if (game && !game.isCompleted) { pendingDiff = diff; $('confirm').hidden = false; }
-    else startNewGame(diff);
+  var pendingDiff = null, pendingAdv = null, doneInfo = null;
+  function requestNewGame(diff, adv) {
+    if (game && !game.isCompleted) { pendingDiff = diff; pendingAdv = adv || null; $('confirm').hidden = false; }
+    else startNewGame(diff, adv);
+  }
+  // 모험 지도에서 레벨 시작: 같은 레벨을 하던 중이면 이어서, 아니면 새로 시작
+  function playLevel(c, l, diff) {
+    if (game && !game.isCompleted && game.adv && game.adv.c === c && game.adv.l === l) {
+      $('menu').hidden = true; menuOpenInGame = false; if (window.SudokuAdv) window.SudokuAdv.close();
+      $('game').hidden = false; layout(); if (paused) resume(); render(); return;
+    }
+    requestNewGame(diff, { c: c, l: l });
   }
 
   // ---- 입력 ----
@@ -183,6 +194,8 @@
   function finishGame() {
     if (!paused) updateElapsed();
     stopTimer();
+    doneInfo = null;
+    if (game.adv && window.SudokuAdv) { try { doneInfo = window.SudokuAdv.onFinish(game); } catch (e) { doneInfo = null; } }
     var time = elapsedMs / 1000, d = game.difficulty;
     stats.solvedCounts[d] = (stats.solvedCounts[d] || 0) + 1;
     var old = stats.bestTimes[d];
@@ -199,11 +212,34 @@
     if (best !== undefined) rows.push(['최고 기록', G.formatTime(best)]);
     $('doneRows').innerHTML = rows.map(function (r) { return '<div><span>' + r[0] + '</span><span>' + r[1] + '</span></div>'; }).join('');
     $('newRecord').hidden = !isNewRecord;
+    var di = doneInfo, note = $('doneAdv'), nx = $('btnDoneNext');
+    document.querySelector('.doneTitle').textContent = di ? '레벨 ' + di.l + ' 완료!' : '완료했어요!';
+    $('btnDoneNew').textContent = di ? '모험 지도로' : '새 게임';
+    nx.hidden = !(di && di.next);
+    if (di) {
+      var lines = [];
+      if (di.replay) lines.push('다시 해 본 레벨이에요 · 진행도는 그대로예요');
+      else {
+        if (di.milestone) lines.push('🖼️ 그림 조각이 열려요!');
+        if (di.gift) lines.push('🎁 선물이 도착했어요!');
+        if (di.chapterDone) lines.push('🎉 ' + di.c + '장 완성!');
+        if (!lines.length) lines.push('✅ 다음 레벨이 열렸어요');
+      }
+      note.innerHTML = lines.map(function (t) { return '<div>' + t + '</div>'; }).join(''); note.hidden = false;
+    } else note.hidden = true;
   }
   function leaveCompleted() {
     if (window.SudokuFX) window.SudokuFX.stop();
+    var di = doneInfo; doneInfo = null;
     $('done').hidden = true; game = null; selected = null; paused = false;
+    if (di && window.SudokuAdv) { $('menu').hidden = true; window.SudokuAdv.open(); return; }
     showMenu(false);
+  }
+  function doneNext() {
+    var di = doneInfo; if (!di || !di.next) return;
+    if (window.SudokuFX) window.SudokuFX.stop();
+    $('done').hidden = true; game = null; selected = null; paused = false; doneInfo = null;
+    startNewGame(window.SudokuAdv.diffFor(di.next.c, di.next.l), di.next);
   }
 
   // ---- 메뉴 ----
@@ -214,6 +250,11 @@
     $('menu').hidden = false; $('menu').scrollTop = 0;
   }
   function renderMenu() {
+    if (window.SudokuAdv) {
+      var sm = window.SudokuAdv.summary();
+      $('advCardT').textContent = sm.title; $('advCardS').textContent = sm.sub;
+      $('advCardDot').hidden = !sm.ready;
+    }
     $('diffList').innerHTML = E.ORDER.map(function (d) {
       var best = stats.bestTimes[d], n = stats.solvedCounts[d] || 0;
       var sub = best !== undefined ? '최고 기록 ' + G.formatTime(best) + ' · ' + n + '회 완료' : '아직 기록이 없어요';
@@ -284,7 +325,7 @@
       el.className = cls + keep;
       el.setAttribute('aria-label', (E.row(i) + 1) + '행 ' + (E.col(i) + 1) + '열 ' + (v ? v : '빈칸'));
     }
-    $('diffName').textContent = E.DIFFICULTIES[game.difficulty].title;
+    $('diffName').textContent = game.adv && window.SudokuAdv ? window.SudokuAdv.labelFor(game.adv) : E.DIFFICULTIES[game.difficulty].title;
     var m = $('mistakes'); m.textContent = '실수 ' + game.mistakes; m.classList.toggle('bad', game.mistakes > 0);
     renderTimer();
     $('btnPause').innerHTML = paused ? ICON.play : ICON.pause;
@@ -352,12 +393,13 @@
   on('btnMenu', function () { pause(); showMenu(true); });
   on('btnContinue', function () { closeMenu(); resume(); });
   on('btnCloseMenu', function () { closeMenu(); });
-  on('btnDoneNew', leaveCompleted);
-  on('confirmNo', function () { pendingDiff = null; $('confirm').hidden = true; });
-  on('confirmYes', function () { var d = pendingDiff; pendingDiff = null; $('confirm').hidden = true; if (d) startNewGame(d); });
+  on('btnDoneNew', leaveCompleted); on('btnDoneNext', doneNext);
+  on('btnAdv', function () { if (window.SudokuAdv) window.SudokuAdv.open(); });
+  on('confirmNo', function () { pendingDiff = null; pendingAdv = null; $('confirm').hidden = true; });
+  on('confirmYes', function () { var d = pendingDiff, ad = pendingAdv; pendingDiff = null; pendingAdv = null; $('confirm').hidden = true; if (d) startNewGame(d, ad); });
   $('diffList').addEventListener('click', function (e) {
     var b = e.target.closest ? e.target.closest('.diffRow') : null;
-    if (b) requestNewGame(b.getAttribute('data-d'));
+    if (b) requestNewGame(b.getAttribute('data-d'), null);
   });
   $('themeSeg').addEventListener('click', function (e) {
     var b = e.target.closest ? e.target.closest('button') : null;
@@ -393,12 +435,19 @@
     window.__maybeReload = maybeReload;
     function maybeReload() {
       if (!updatePending) return;
-      var idle = $('game').hidden || paused || !$('menu').hidden;
+      var idle = $('game').hidden || paused || !$('menu').hidden || (window.SudokuAdv && window.SudokuAdv.isOpen());
       if (idle && $('done').hidden) { save(); location.reload(); }
     }
     document.addEventListener('visibilitychange', function () { if (document.hidden) setTimeout(maybeReload, 50); });
     window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
   }
+
+  // 모험 화면(adventure.js)과 연결
+  window.SudokuApp = {
+    playLevel: playLevel, toast: toast, refreshMenu: function () { if (!$('menu').hidden) renderMenu(); },
+    unfinishedAdv: function () { return game && !game.isCompleted && game.adv ? game.adv : null; },
+    afterMapBack: function () { if (!$('menu').hidden) return; if (game && !game.isCompleted) { showMenu(true); } else showMenu(false); }
+  };
 
   // 테스트/디버그용 (화면에는 영향 없음)
   window.__sudoku = { celebrate: function (o) { return window.SudokuFX.play(o); }, get game() { return game; }, get selected() { return selected; }, get paused() { return paused; } };

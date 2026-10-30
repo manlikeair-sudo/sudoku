@@ -5,6 +5,9 @@
   var BOTH_EVERY = 5;                                   // 강아지 순서 5번에 1번은 두 마리가 함께
   // 완료할 때마다 순서대로 돌아가며 보여 줍니다. 강아지는 2번에 1번, 갈색/흰색이 번갈아 나옵니다.
   var SEQ = ['fireworks', 'dog', 'confetti', 'dog', 'balloons', 'dog', 'stars', 'dog'];
+  var EXTRAS = [];                                      // 모험 선물로 열린 효과 (adventure.js 가 setExtras 로 알려 줌)
+  var EXTRA_CHEER = { petals: '꽃길만 걸어요 🌸', paws: '발자국 총총 🐾', bubbles: '퐁퐁 축하해요 🫧', snow: '눈꽃처럼 반짝! ❄️', fireflies: '반딧불이 반짝반짝 ✨' };
+  function fullSeq() { var s = SEQ.slice(); EXTRAS.forEach(function (e) { s.push(e, 'dog'); }); return s; }
   var CHEERS = ['완성! 최고예요 🎉', '정말 잘했어요! 👏', '대단해요! ✨', '오늘도 해냈어요! 🌷'];
   var DOG_CHEER = '완성이에요! 멍멍 🐶💕';
   var PASTEL = ['#FFB3C7', '#FFD3A5', '#FFF1A8', '#BDF2C8', '#A5EDF7', '#A9C8FF', '#CDBFFF', '#FFC8F2'];
@@ -20,7 +23,7 @@
   // ---- 효과 순서 (localStorage에 저장) ----
   function next() {
     var idx = parseInt(lsGet(IDX_KEY), 10); if (!(idx >= 0)) idx = 0;
-    var effect = SEQ[idx % SEQ.length];
+    var seq = fullSeq(), effect = seq[idx % seq.length];
     lsSet(IDX_KEY, String(idx + 1));
     var out = { effect: effect, dog: null, index: idx };
     if (effect === 'dog') {
@@ -165,6 +168,66 @@
     }
   };
 
+
+  // ---- 모험 선물 효과 (5가지) ----
+  // 비눗방울
+  EFFECTS.bubbles = {
+    duration: 8500,
+    init: function () { var n = RM ? 14 : 34; for (var i = 0; i < n; i++) sched.push({ at: rnd(0, 4800), fn: bubble }); }
+  };
+  function bubble() {
+    var r = rnd(14, 42);
+    parts.push({ kind: 'bubble', x: rnd(W * 0.05, W * 0.95), y: H + r * 2, vy: -rnd(45, 95) * (RM ? 0.5 : 1), sway: RM ? 0 : rnd(10, 28), ph: rnd(0, 6.28),
+      s: r, color: pick(PASTEL), age: 0, life: 99, maxA: 1 });
+  }
+  // 꽃잎
+  EFFECTS.petals = {
+    duration: 8500,
+    init: function () { var n = RM ? 24 : 70; for (var i = 0; i < n; i++) sched.push({ at: rnd(0, 5000), fn: petal }); }
+  };
+  function petal() {
+    parts.push({ kind: 'petal', x: rnd(-20, W + 20), y: -20, vy: rnd(45, 90) * (RM ? 0.5 : 1), sway: RM ? 0 : rnd(25, 60), ph: rnd(0, 6.28), rot: rnd(0, 6.28), vr: RM ? 0 : rnd(-1.4, 1.4),
+      s: rnd(7, 13), color: pick(['#FFC4D6', '#FFB3C7', '#FFD9E4', '#FFE3EC', '#FFC8F2']), age: 0, life: 99, maxA: 0.95 });
+  }
+  // 눈꽃
+  EFFECTS.snow = {
+    duration: 8500,
+    init: function () { var n = RM ? 30 : 90; for (var i = 0; i < n; i++) sched.push({ at: rnd(0, 5200), fn: flake }); }
+  };
+  function flake() {
+    parts.push({ kind: 'snow', x: rnd(-10, W + 10), y: -20, vy: rnd(40, 85) * (RM ? 0.5 : 1), sway: RM ? 0 : rnd(10, 30), ph: rnd(0, 6.28), rot: rnd(0, 6.28), vr: RM ? 0 : rnd(-0.8, 0.8),
+      s: rnd(5, 13), six: Math.random() < 0.5, age: 0, life: 99, maxA: 0.95 });
+  }
+  // 반딧불이
+  EFFECTS.fireflies = {
+    duration: 8500,
+    init: function () { var n = RM ? 16 : 36; for (var i = 0; i < n; i++) sched.push({ at: rnd(0, 3600), fn: firefly }); }
+  };
+  function firefly() {
+    var a = rnd(0, 6.28), s = rnd(8, 24);
+    parts.push({ kind: 'fly', x: rnd(W * 0.05, W * 0.95), y: rnd(H * 0.2, H * 0.95), vx: Math.cos(a) * s, vy: Math.sin(a) * s, drag: 0.992, ph: rnd(0, 6.28), tw: rnd(2, 4),
+      r: rnd(7, 13), color: pick(['#FFE066', '#D8F27A', '#FFD38A']), age: 0, life: rnd(4.2, 6.2), maxA: 0.95 });
+  }
+  // 발자국 총총
+  EFFECTS.paws = {
+    duration: 8000,
+    init: function () {
+      var n = RM ? 8 : 16, i;
+      for (i = 0; i < n; i++) (function (k) {
+        sched.push({ at: 250 + k * (RM ? 420 : 300), fn: function () { pawPrint(k, n); } });
+      })(i);
+    }
+  };
+  function pawPrint(k, n) {
+    var t = k / (n - 1), side = k % 2 ? 1 : -1, ang = -0.62;     // 왼쪽 아래 → 오른쪽 위 대각선
+    var x0 = W * 0.1, y0 = H * 0.86, x1 = W * 0.9, y1 = H * 0.16;
+    var dx = x1 - x0, dy = y1 - y0, len = Math.sqrt(dx * dx + dy * dy), nx = -dy / len, ny = dx / len, off = side * Math.min(W, H) * 0.035;
+    parts.push({ kind: 'paw', x: x0 + dx * t + nx * off, y: y0 + dy * t + ny * off, rot: Math.atan2(dy, dx) + 1.5708, s: Math.max(15, Math.min(W, H) / 28),
+      color: k % 2 ? '#E7A3B5' : '#D9A27A', age: 0, life: 3.4, maxA: 0.9 });
+    parts.push({ kind: 'heart', x: x0 + dx * t - nx * off * 4, y: y0 + dy * t - ny * off * 4, vy: -rnd(20, 40), sway: RM ? 0 : 10, ph: rnd(0, 6.28), s: rnd(6, 10),
+      color: pick(['#FFB3C7', '#FFC8F2']), age: 0, life: 2.2, maxA: 0.8 });
+  }
+
   // ---- 그리기 ----
   function heartPath(c, s) {
     c.beginPath(); c.moveTo(0, s * 0.35);
@@ -221,6 +284,44 @@
       ctx.globalAlpha = a * tw; ctx.rotate(p.rot); ctx.fillStyle = p.color; ctx.strokeStyle = p.color; ctx.lineJoin = 'round'; ctx.lineWidth = p.four ? 0 : 3;
       starPath(ctx, p.r, p.four); ctx.fill(); if (!p.four) ctx.stroke();
       ctx.restore();
+    } else if (p.kind === 'bubble') {
+      var br = p.s;
+      ctx.save(); ctx.globalAlpha = a * 0.95; ctx.translate(p.x, p.y);
+      var bg = ctx.createRadialGradient(-br * 0.3, -br * 0.3, br * 0.1, 0, 0, br);
+      bg.addColorStop(0, 'rgba(255,255,255,0.5)'); bg.addColorStop(0.7, rgba(p.color, 0.16)); bg.addColorStop(1, rgba(p.color, 0.5));
+      ctx.fillStyle = bg; ctx.beginPath(); ctx.arc(0, 0, br, 0, 6.2832); ctx.fill();
+      ctx.strokeStyle = rgba(p.color, 0.85); ctx.lineWidth = 2; ctx.stroke();
+      ctx.fillStyle = 'rgba(255,255,255,0.8)'; ctx.beginPath(); ctx.ellipse(-br * 0.38, -br * 0.4, br * 0.2, br * 0.12, -0.7, 0, 6.2832); ctx.fill();
+      ctx.restore();
+    } else if (p.kind === 'petal') {
+      ctx.save(); ctx.globalAlpha = a; ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+      ctx.scale(1, RM ? 1 : 0.55 + 0.45 * Math.cos(T * 2.5 + p.ph));
+      ctx.fillStyle = p.color; ctx.beginPath(); ctx.moveTo(0, -p.s); ctx.bezierCurveTo(p.s * 0.9, -p.s * 0.6, p.s * 0.8, p.s * 0.6, 0, p.s); ctx.bezierCurveTo(-p.s * 0.8, p.s * 0.6, -p.s * 0.9, -p.s * 0.6, 0, -p.s); ctx.fill();
+      ctx.restore();
+    } else if (p.kind === 'snow') {
+      ctx.save(); ctx.globalAlpha = a; ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+      if (p.six) {
+        ctx.strokeStyle = '#9CC4F5'; ctx.lineWidth = 2.2; ctx.lineCap = 'round';
+        for (var q = 0; q < 3; q++) { ctx.rotate(1.0472); ctx.beginPath(); ctx.moveTo(-p.s, 0); ctx.lineTo(p.s, 0); ctx.stroke(); }
+      } else {
+        ctx.fillStyle = '#E4F0FF'; ctx.strokeStyle = '#A9CBF5'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(0, 0, p.s * 0.55, 0, 6.2832); ctx.fill(); ctx.stroke();
+      }
+      ctx.restore();
+    } else if (p.kind === 'fly') {
+      var fl = RM ? 1 : 0.55 + 0.45 * Math.sin(T * p.tw + p.ph);
+      ctx.save(); ctx.translate(p.x, p.y);
+      ctx.globalAlpha = a * fl * 0.75; ctx.drawImage(sprite(p.color), -p.r * 3, -p.r * 3, p.r * 6, p.r * 6);
+      ctx.globalAlpha = a * (0.6 + 0.4 * fl); ctx.fillStyle = '#FFFBD6'; ctx.strokeStyle = '#E8B84A'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.arc(0, 0, p.r * 0.42, 0, 6.2832); ctx.fill(); ctx.stroke();
+      ctx.restore();
+    } else if (p.kind === 'paw') {
+      var pa = a * Math.min(1, p.age / 0.3), s = p.s * (RM ? 1 : (0.75 + 0.25 * Math.min(1, p.age / 0.35)));
+      ctx.save(); ctx.globalAlpha = pa; ctx.translate(p.x, p.y); ctx.rotate(p.rot); ctx.fillStyle = p.color;
+      ctx.beginPath(); ctx.ellipse(0, s * 0.35, s * 0.62, s * 0.5, 0, 0, 6.2832); ctx.fill();
+      [[-0.78, -0.35, 0.26], [-0.28, -0.82, 0.28], [0.28, -0.82, 0.28], [0.78, -0.35, 0.26]].forEach(function (t) {
+        ctx.beginPath(); ctx.ellipse(t[0] * s, t[1] * s, t[2] * s, t[2] * s * 1.2, 0, 0, 6.2832); ctx.fill();
+      });
+      ctx.restore();
     } else if (p.spr) {
       var sz = p.size * (p.grow ? 1 + (p.grow - 1) * (p.age / p.life) : 1 - 0.3 * (p.age / p.life));
       ctx.globalAlpha = a; ctx.drawImage(p.spr, p.x - sz / 2, p.y - sz / 2, sz, sz); ctx.globalAlpha = 1;
@@ -237,11 +338,12 @@
       var p = parts[i]; p.age += dt;
       if (p.drag && p.drag !== 1) { var d = Math.pow(p.drag, dt * 60); p.vx *= d; p.vy *= d; }
       if (p.g) p.vy += p.g * dt;
-      if (p.kind === 'conf' || p.kind === 'heart' || p.kind === 'balloon') {
+      if (p.kind === 'conf' || p.kind === 'heart' || p.kind === 'balloon' || p.kind === 'bubble' || p.kind === 'petal' || p.kind === 'snow') {
         p.y += (p.vy || 0) * dt; p.x += Math.cos(T * 1.6 + p.ph) * (p.sway || 0) * dt; if (p.vr) p.rot += p.vr * dt;
         if (p.life < 90 && p.age >= p.life) { parts.splice(i, 1); continue; }
         if ((p.vy > 0 && p.y > H + 40) || (p.vy < 0 && p.y < -(p.s || 0) * 4 - 40)) { parts.splice(i, 1); continue; }
       } else {
+        if (p.kind === 'fly') { p.vx += Math.cos(T * 1.3 + p.ph) * 22 * dt; p.vy += Math.sin(T * 1.1 + p.ph * 1.7) * 22 * dt; }
         p.x += (p.vx || 0) * dt; p.y += (p.vy || 0) * dt; if (p.vr) p.rot += p.vr * dt;
         if (p.age >= p.life) { parts.splice(i, 1); continue; }
       }
@@ -300,6 +402,7 @@
   function play(opts) {
     stop(true);
     opts = opts || {};
+    if (opts.effect && !EFFECTS[opts.effect]) opts = {};
     var pickd = opts.effect ? { effect: opts.effect, dog: opts.dog || (opts.effect === 'dog' ? takeDog() : null) } : next();   // dog: 'brown' | 'white' | 'both'
     if (pickd.effect === 'dog' && !pickd.dog) pickd.dog = takeDog();
     RM = reducedMotion();
@@ -308,7 +411,7 @@
     layer.className = RM ? 'rm' : '';
     canvas = document.createElement('canvas'); layer.appendChild(canvas);
     var cheer = document.createElement('div'); cheer.className = 'fxCheer';
-    cheer.textContent = pickd.effect === 'dog' ? DOG_CHEER : CHEERS[(pickd.index || 0) % CHEERS.length];
+    cheer.textContent = pickd.effect === 'dog' ? DOG_CHEER : (EXTRA_CHEER[pickd.effect] || CHEERS[(pickd.index || 0) % CHEERS.length]);
     layer.appendChild(cheer);
     app.appendChild(layer);
     ctx = canvas.getContext('2d'); resize();
@@ -343,6 +446,7 @@
   setTimeout(preload, 2500);
   root.SudokuFX = {
     play: play, stop: stop, next: next, preload: preload, SEQ: SEQ,
+    setExtras: function (list) { EXTRAS = (list || []).filter(function (e) { return EFFECTS[e] && SEQ.indexOf(e) < 0; }); },
     state: function () { return cur ? { running: true, effect: cur.effect, dog: cur.dog } : { running: false }; }
   };
 })(window);

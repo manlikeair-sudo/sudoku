@@ -64,6 +64,7 @@
         <p>광고 없이 조용하게</p>
       </div>
       <button class="primary wide" id="btnContinue" hidden>이어하기</button>
+      <button class="advCard" id="btnAdv"><span class="acIcon">🐾</span><span class="acText"><span class="acT" id="advCardT">모험</span><span class="acS" id="advCardS"></span></span><i class="acDot" id="advCardDot" hidden>🎁</i><span class="chev">›</span></button>
       <h2>새 게임</h2>
       <div id="diffList"></div>
       <h2>화면 모드</h2>
@@ -76,6 +77,11 @@
     </div>
   </div>
 
+  <!-- 모험 지도 / 스티커북 / 선물 -->
+  <div id="adv" hidden><div class="advInner" id="advBody"></div><div class="overlay" id="advBanner" hidden></div></div>
+  <div id="album" hidden><div class="advInner" id="albumBody"></div></div>
+  <div class="overlay" id="gift" hidden></div>
+
   <!-- 완료 -->
   <div class="overlay" id="done" hidden>
     <div class="card">
@@ -83,7 +89,9 @@
       <h2 class="doneTitle">완료했어요!</h2>
       <div class="badge" id="newRecord" hidden>새로운 최고 기록</div>
       <div class="rows" id="doneRows"></div>
+      <div class="advNote" id="doneAdv" hidden></div>
       <button class="primary wide" id="btnDoneNew">새 게임</button>
+      <button class="plain wide" id="btnDoneNext" hidden>다음 레벨</button>
     </div>
   </div>
 
@@ -105,5 +113,6 @@
 <script src="game.js"></script>
 <script src="effects.js"></script>
 <script src="app.js"></script>
+<script src="adventure.js"></script>
 </body>
 </html>
