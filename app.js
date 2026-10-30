@@ -252,7 +252,7 @@
   function renderMenu() {
     if (window.SudokuAdv) {
       var sm = window.SudokuAdv.summary();
-      $('advCardT').textContent = sm.title; $('advCardS').textContent = sm.sub;
+      if (sm.thumb) $('advCardI').innerHTML = sm.thumb; $('advCardT').textContent = sm.title; $('advCardS').textContent = sm.sub;
       $('advCardDot').hidden = !sm.ready;
     }
     $('diffList').innerHTML = E.ORDER.map(function (d) {

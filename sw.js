@@ -1,8 +1,9 @@
 /* 오프라인용 서비스 워커: 앱 파일을 캐시해 두고 네트워크 없이도 열리게 합니다. */
-var CACHE = 'sudoku-v7';
+var CACHE = 'sudoku-v8';
 var FILES = [
   './', './index.html', './style.css', './engine.js', './game.js', './effects.js', './app.js', './adventure.js',
-  './manifest.json', './dogs/dog-white.webp', './dogs/dog-white.png', './dogs/dog-brown.webp', './dogs/dog-brown.png', './icons/apple-touch-icon.png', './icons/icon-192.png', './icons/icon-512.png'
+  './manifest.json', './dogs/dog-white.webp', './dogs/dog-white.png', './dogs/dog-brown.webp', './dogs/dog-brown.png', './icons/apple-touch-icon.png', './icons/icon-192.png', './icons/icon-512.png',
+  './art/ch1.webp', './art/ch1-th.webp', './art/ch1-full.webp', './art/ch2.webp', './art/ch2-th.webp', './art/ch2-full.webp', './art/ch3.webp', './art/ch3-th.webp', './art/ch3-full.webp', './art/ch4.webp', './art/ch4-th.webp', './art/ch4-full.webp', './art/ch5.webp', './art/ch5-th.webp', './art/ch5-full.webp'
 ];
 
 self.addEventListener('install', function (e) {

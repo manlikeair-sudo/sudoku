@@ -21,14 +21,14 @@
 
   var STICKERS = {
     s1: { name: '산책 나온 토리', dogs: ['brown'], emo: '🌼', bg: ['#C8F0C0', '#8ED88F'] },
-    s2: { name: '꽃길 산책 캐피', dogs: ['white'], emo: '🌷', bg: ['#FFE0EC', '#FFB7D0'] },
-    s3: { name: '샌드위치 토리', dogs: ['brown'], emo: '🥪', bg: ['#FFF0C2', '#FFD27A'] },
-    s4: { name: '피크닉 온 캐피', dogs: ['white'], emo: '🧺', bg: ['#FFE3D3', '#FFB99A'] },
-    s5: { name: '튜브 탄 토리', dogs: ['brown'], emo: '🏖️', bg: ['#C9F0FF', '#7DD6EE'] },
-    s6: { name: '조개 줍는 캐피', dogs: ['white'], emo: '🐚', bg: ['#D8F4F4', '#9FE0E2'] },
-    s7: { name: '눈사람과 토리', dogs: ['brown'], emo: '⛄', bg: ['#E4EEFF', '#B7CFF7'] },
-    s8: { name: '목도리 두른 캐피', dogs: ['white'], emo: '🧣', bg: ['#EBE3FF', '#C7B8F5'] },
-    s9: { name: '집에 온 토리', dogs: ['brown'], emo: '🏠', bg: ['#FFE8C6', '#FFC98C'] },
+    s2: { name: '들판의 캐피', dogs: ['white'], emo: '🌿', bg: ['#FFE0EC', '#FFB7D0'] },
+    s3: { name: '신난 토리', dogs: ['brown'], emo: '🐾', bg: ['#FFF0C2', '#FFD27A'] },
+    s4: { name: '탁 트인 곳의 캐피', dogs: ['white'], emo: '🌾', bg: ['#FFE3D3', '#FFB99A'] },
+    s5: { name: '졸린 토리', dogs: ['brown'], emo: '💤', bg: ['#C9F0FF', '#7DD6EE'] },
+    s6: { name: '쿨쿨 캐피', dogs: ['white'], emo: '🌙', bg: ['#D8F4F4', '#9FE0E2'] },
+    s7: { name: '꿈나라 토리', dogs: ['brown'], emo: '☁️', bg: ['#E4EEFF', '#B7CFF7'] },
+    s8: { name: '새근새근 캐피', dogs: ['white'], emo: '😴', bg: ['#EBE3FF', '#C7B8F5'] },
+    s9: { name: '식물 사이 토리', dogs: ['brown'], emo: '🏠', bg: ['#FFE8C6', '#FFC98C'] },
     s10: { name: '토리와 캐피', dogs: ['brown', 'white'], emo: '💕', bg: ['#FFD9E6', '#FFA9C8'] }
   };
   var EFFECT_INFO = {
@@ -57,11 +57,11 @@
 
   // 장마다 선물 4개: 레벨 4 = 스티커, 8 = 새 축하 효과, 12 = 스티커, 20 = 보드 색
   var CHAPTERS = [
-    { name: '공원 산책', desc: '햇살 좋은 날, 토리와 산책해요', who: '토리', fx: 'petals', theme: 'mint', st: ['s1', 's2'], seeds: [[70, 60], [80, 330], [570, 70], [580, 330], [320, 215, 11000]] },
-    { name: '꽃밭 소풍', desc: '캐피와 도시락 소풍', who: '캐피', fx: 'paws', theme: 'peach', st: ['s3', 's4'], seeds: [[580, 330], [70, 70], [570, 70], [80, 330], [330, 220, 11000]] },
-    { name: '바닷가', desc: '파도 소리 들리는 바닷가, 토리와 캐피', who: '토리와 캐피', fx: 'bubbles', theme: 'sea', st: ['s5', 's6'], seeds: [[320, 50], [60, 330], [580, 60], [200, 270], [480, 290, 11000]] },
-    { name: '눈 오는 날', desc: '토리와 캐피가 눈사람과 놀아요', who: '토리와 캐피', fx: 'snow', theme: 'lav', st: ['s7', 's8'], seeds: [[70, 60], [70, 340], [560, 70], [560, 320], [260, 230, 11000]] },
-    { name: '우리 집', desc: '포근한 우리 집, 토리와 캐피도 함께', who: '토리와 캐피', fx: 'fireflies', theme: 'rose', st: ['s9', 's10'], seeds: [[60, 60], [60, 340], [580, 70], [230, 260], [430, 270, 11000]] }
+    { name: '공원 산책', desc: '반짝이는 공원에서 토리와 신나는 산책', who: '토리', fx: 'petals', theme: 'mint', st: ['s1', 's2'], seeds: [[590, 430], [60, 50], [590, 60], [60, 430], [300, 235, 11000]] },
+    { name: '들판 나들이', desc: '탁 트인 들판에서 캐피와 산책', who: '캐피', fx: 'paws', theme: 'peach', st: ['s3', 's4'], seeds: [[590, 60], [60, 60], [60, 430], [590, 430], [320, 270, 11000]] },
+    { name: '포근한 낮잠', desc: '체크무늬 쿠션 위에서 캐피가 쿨쿨', who: '캐피', fx: 'bubbles', theme: 'sea', st: ['s5', 's6'], seeds: [[60, 430], [60, 60], [590, 60], [590, 430], [320, 270, 11000]] },
+    { name: '소파 위 단잠', desc: '분홍 소파에서 캐피가 새근새근', who: '캐피', fx: 'snow', theme: 'lav', st: ['s7', 's8'], seeds: [[590, 60], [60, 60], [60, 430], [590, 430], [310, 280, 11000]] },
+    { name: '우리 집', desc: '식물 가득한 우리 집, 토리가 방긋', who: '토리', fx: 'fireflies', theme: 'rose', st: ['s9', 's10'], seeds: [[60, 430], [590, 430], [60, 60], [590, 60], [300, 280, 11000]] }
   ];
   function rewardFor(c, l) {
     var ch = CHAPTERS[c - 1], i = MILES.indexOf(l);
@@ -74,102 +74,11 @@
     return r.type === 'sticker' ? STICKERS[r.id].name : r.type === 'effect' ? EFFECT_INFO[r.id].name : THEMES[r.id].name;
   }
 
-  // =============================================================== 그림 (직접 그린 SVG + 우리 빠삐용 일러스트)
+  // =============================================================== 그림 (가족 일러스트 5장 — art/chN.webp = 4:3 지도용, chN-full = 전체, chN-th = 작은 미리보기)
   var uidN = 0;
-  function dogImg(k, x, y, h) {
-    var w = h * 281 / 600;
-    return '<ellipse cx="' + (x + w / 2) + '" cy="' + (y + h - 3) + '" rx="' + (w * 0.52) + '" ry="' + (h * 0.04) + '" fill="rgba(60,45,30,.22)"/>' +
-      '<image href="' + DOG[k] + '" x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '"/>';
+  function sceneSVG(c, full) {
+    return '<svg class="scene" viewBox="0 0 640 480" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><image href="art/ch' + c + '.webp" width="640" height="480" preserveAspectRatio="xMidYMid slice"/></svg>';
   }
-  function cloud(x, y, s) {
-    return '<g fill="#fff" opacity=".92" transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><circle cx="0" cy="0" r="22"/><circle cx="26" cy="-10" r="28"/><circle cx="56" cy="2" r="21"/><rect x="-22" y="0" width="100" height="22" rx="11"/></g>';
-  }
-  function tree(x, y, s, c1, c2) {
-    return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><rect x="-8" y="30" width="16" height="78" rx="6" fill="#B98A5E"/>' +
-      '<circle cx="0" cy="18" r="46" fill="' + c1 + '"/><circle cx="-34" cy="46" r="32" fill="' + c1 + '"/><circle cx="34" cy="46" r="32" fill="' + c1 + '"/><circle cx="-12" cy="2" r="22" fill="' + c2 + '" opacity=".7"/></g>';
-  }
-  function flowers(list) {
-    return list.map(function (f) {
-      return '<g transform="translate(' + f[0] + ' ' + f[1] + ')"><rect x="-1" y="0" width="2" height="12" fill="#6DB36E"/>' +
-        [0, 72, 144, 216, 288].map(function (a) { return '<circle cx="' + (Math.cos(a * 0.01745) * 5).toFixed(1) + '" cy="' + (Math.sin(a * 0.01745) * 5).toFixed(1) + '" r="3.6" fill="' + f[2] + '"/>'; }).join('') +
-        '<circle r="2.6" fill="#FFE27A"/></g>';
-    }).join('');
-  }
-  function pine(x, y, s) {
-    return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><rect x="-6" y="70" width="12" height="22" fill="#9A7350"/>' +
-      '<path d="M0 -20 L38 30 H-38Z" fill="#6FB39D"/><path d="M0 8 L48 70 H-48Z" fill="#5FA38E"/>' +
-      '<path d="M0 -20 L14 -1 Q0 6 -14 -1Z" fill="#fff"/><path d="M-6 24 Q0 30 6 24 L24 48 Q0 56 -24 48Z" fill="#fff" opacity=".9"/></g>';
-  }
-  var ART = {
-    1: function (u) { // 공원
-      return '<defs><linearGradient id="sk' + u + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A9DDFB"/><stop offset="1" stop-color="#FFF1D2"/></linearGradient></defs>' +
-        '<rect width="640" height="400" fill="url(#sk' + u + ')"/><circle cx="92" cy="76" r="60" fill="#FFE9A6" opacity=".45"/><circle cx="92" cy="76" r="34" fill="#FFD45E"/>' +
-        cloud(250, 70, 1) + cloud(470, 112, .8) +
-        '<ellipse cx="160" cy="292" rx="270" ry="92" fill="#BDE7AC"/><ellipse cx="520" cy="300" rx="300" ry="100" fill="#A7DC9A"/><rect y="282" width="640" height="120" fill="#8ED08B"/>' +
-        '<path d="M300 400 C330 345 270 325 345 290 S430 272 452 262 L482 262 C450 292 392 312 402 342 S424 382 446 400Z" fill="#F6E7C1"/>' +
-        tree(545, 150, 1, '#5DB86B', '#86D58D') + tree(112, 168, 1.15, '#63BF70', '#8CDA94') +
-        flowers([[40, 340, '#FF9EBB'], [80, 360, '#FFF'], [180, 350, '#FFD27A'], [230, 372, '#FF9EBB'], [470, 350, '#FFF'], [520, 372, '#FF9EBB'], [590, 345, '#FFD27A'], [610, 380, '#FFF'], [150, 310, '#FFF'], [560, 312, '#FF9EBB']]) +
-        dogImg('brown', 262, 126, 262);
-    },
-    2: function (u) { // 소풍
-      return '<defs><linearGradient id="sk' + u + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFD9E6"/><stop offset="1" stop-color="#FFF6DF"/></linearGradient>' +
-        '<pattern id="gh' + u + '" width="36" height="36" patternUnits="userSpaceOnUse"><rect width="36" height="36" fill="#fff"/><rect width="18" height="36" fill="#FF9DAA" opacity=".55"/><rect width="36" height="18" fill="#FF9DAA" opacity=".55"/></pattern></defs>' +
-        '<rect width="640" height="400" fill="url(#sk' + u + ')"/>' + cloud(430, 80, .9) + cloud(120, 110, .7) +
-        '<ellipse cx="170" cy="270" rx="280" ry="80" fill="#C7E8B0"/><ellipse cx="500" cy="282" rx="300" ry="82" fill="#B2E09E"/><rect y="270" width="640" height="130" fill="#A5DB92"/>' +
-        '<path d="M0 36 Q320 96 640 36" stroke="#C99A6B" stroke-width="3" fill="none"/>' +
-        [40, 110, 180, 250, 320, 390, 460, 530, 600].map(function (x, i) { var y = 36 + Math.sin(x / 640 * 3.14159) * 38 * 0.9 + 0; return '<path d="M' + (x - 16) + ' ' + (y - 2) + ' L' + (x + 16) + ' ' + (y - 2) + ' L' + x + ' ' + (y + 34) + 'Z" fill="' + ['#FF8FA3', '#FFD36E', '#8FD3F4', '#B9A3F0'][i % 4] + '"/>'; }).join('') +
-        tree(82, 150, 1.05, '#7CCB84', '#A2E0A6') +
-        '<path d="M150 322 L500 322 L585 392 L65 392Z" fill="url(#gh' + u + ')" stroke="#FF9DAA" stroke-width="3" stroke-linejoin="round"/>' +
-        dogImg('white', 268, 120, 268) +
-        '<g transform="translate(468 292)"><path d="M0 18 Q0 56 38 56 Q76 56 76 18Z" fill="#C98F5B"/><path d="M-4 18 H80" stroke="#A8744A" stroke-width="6" stroke-linecap="round"/><path d="M12 18 Q38 -14 64 18" stroke="#A8744A" stroke-width="5" fill="none"/><circle cx="14" cy="8" r="10" fill="#FF7B7B"/><circle cx="60" cy="10" r="9" fill="#FFB347"/></g>' +
-        '<g><path d="M552 90 L548 150" stroke="#fff" stroke-width="2"/><ellipse cx="552" cy="68" rx="24" ry="30" fill="#FF9DB8"/><path d="M590 120 L560 160" stroke="#fff" stroke-width="2"/><ellipse cx="594" cy="98" rx="20" ry="26" fill="#8FD3F4"/></g>' +
-        flowers([[30, 350, '#FF9EBB'], [600, 340, '#FFD27A'], [30, 300, '#fff'], [615, 300, '#FF9EBB'], [120, 372, '#FFD27A']]);
-    },
-    3: function (u) { // 바닷가
-      return '<defs><linearGradient id="sk' + u + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8ADBF6"/><stop offset="1" stop-color="#E4F8FF"/></linearGradient>' +
-        '<linearGradient id="sea' + u + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4DC3DE"/><stop offset="1" stop-color="#97E3F0"/></linearGradient></defs>' +
-        '<rect width="640" height="400" fill="url(#sk' + u + ')"/><circle cx="320" cy="62" r="52" fill="#FFF0B0" opacity=".55"/><circle cx="320" cy="62" r="30" fill="#FFD45E"/>' + cloud(120, 70, .9) + cloud(520, 100, .75) +
-        '<rect y="150" width="640" height="110" fill="url(#sea' + u + ')"/>' +
-        '<path d="M0 190 Q40 176 80 190 T160 190 T240 190 T320 190 T400 190 T480 190 T560 190 T640 190" stroke="#fff" stroke-width="4" fill="none" opacity=".7"/>' +
-        '<path d="M0 224 Q40 210 80 224 T160 224 T240 224 T320 224 T400 224 T480 224 T560 224 T640 224" stroke="#fff" stroke-width="3" fill="none" opacity=".5"/>' +
-        '<path d="M0 262 Q160 236 320 258 T640 250 V400 H0Z" fill="#F8E5B8"/><path d="M0 262 Q160 236 320 258 T640 250" stroke="#fff" stroke-width="6" fill="none" opacity=".75"/>' +
-        '<g transform="translate(500 150)"><rect x="-3" y="20" width="6" height="150" rx="3" fill="#B98A5E"/><path d="M-84 50 A84 70 0 0 1 84 50Z" fill="#FF8FA3"/><path d="M-84 50 A84 70 0 0 1 -28 -14 L-4 50Z" fill="#fff"/><path d="M28 -14 A84 70 0 0 1 84 50 L4 50Z" fill="#fff"/><path d="M-84 50 Q-70 62 -56 50 Q-42 62 -28 50 Q-14 62 0 50 Q14 62 28 50 Q42 62 56 50 Q70 62 84 50" fill="#FF8FA3"/></g>' +
-        '<g transform="translate(78 330)"><circle r="26" fill="#fff"/><path d="M0 0 L26 0 A26 26 0 0 0 13 -22.5Z" fill="#FF8FA3"/><path d="M0 0 L-13 -22.5 A26 26 0 0 0 -26 0Z" fill="#8FD3F4"/><path d="M0 0 L-13 22.5 A26 26 0 0 0 13 22.5Z" fill="#FFD36E"/><circle r="5" fill="#fff"/></g>' +
-        '<g transform="translate(580 350)" fill="#FFB3A0"><path d="M0 -16 L4 -5 L16 -5 L6 2 L10 14 L0 7 L-10 14 L-6 2 L-16 -5 L-4 -5Z"/></g>' +
-        '<g transform="translate(40 280)"><path d="M0 14 Q0 -6 16 -6 Q32 -6 32 14Z" fill="#FFD9E6" stroke="#F3B4CB" stroke-width="2"/></g>' +
-        dogImg('brown', 188, 134, 258) + dogImg('white', 330, 146, 246);
-    },
-    4: function (u) { // 눈 오는 날
-      return '<defs><linearGradient id="sk' + u + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#BBD0F4"/><stop offset="1" stop-color="#F1F6FF"/></linearGradient></defs>' +
-        '<rect width="640" height="400" fill="url(#sk' + u + ')"/><circle cx="548" cy="72" r="34" fill="#FFF8DC"/><circle cx="560" cy="64" r="30" fill="#DCE8FB" opacity=".0"/>' +
-        '<ellipse cx="150" cy="282" rx="290" ry="80" fill="#EEF4FF"/><ellipse cx="520" cy="288" rx="300" ry="84" fill="#E4EDFC"/><rect y="282" width="640" height="120" fill="#FBFDFF"/>' +
-        '<path d="M0 340 Q200 318 400 346 T640 336" stroke="#E0EAFA" stroke-width="5" fill="none"/>' +
-        pine(60, 112, 1) + pine(130, 150, .78) +
-        '<g transform="translate(505 236)"><circle cy="64" r="52" fill="#fff" stroke="#D5E1F5" stroke-width="3"/><circle cy="2" r="38" fill="#fff" stroke="#D5E1F5" stroke-width="3"/><circle cy="-52" r="27" fill="#fff" stroke="#D5E1F5" stroke-width="3"/>' +
-        '<circle cx="-9" cy="-57" r="3.4" fill="#4A4A5A"/><circle cx="9" cy="-57" r="3.4" fill="#4A4A5A"/><path d="M0 -50 L22 -46 L0 -42Z" fill="#FF9F4A"/>' +
-        '<circle cy="-4" r="4" fill="#4A4A5A"/><circle cy="14" r="4" fill="#4A4A5A"/><path d="M-27 -32 Q0 -22 27 -32 L27 -24 Q0 -14 -27 -24Z" fill="#FF7B8B"/><path d="M16 -26 L22 -2 L10 0Z" fill="#FF7B8B"/>' +
-        '<path d="M-20 -72 H20 L16 -88 H-16Z" fill="#6B6FA3"/><rect x="-28" y="-74" width="56" height="7" rx="3" fill="#6B6FA3"/></g>' +
-        dogImg('brown', 176, 126, 262) + dogImg('white', 296, 140, 248) +
-        [[40, 40], [110, 80], [210, 30], [300, 70], [380, 36], [450, 100], [520, 24], [600, 120], [70, 210], [440, 190], [600, 230], [330, 120], [160, 140]].map(function (p, i) { return '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="' + (3 + i % 3) + '" fill="#fff" opacity=".95"/>'; }).join('');
-    },
-    5: function (u) { // 우리 집
-      return '<defs><linearGradient id="wl' + u + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE3C4"/><stop offset="1" stop-color="#FFEFD9"/></linearGradient>' +
-        '<linearGradient id="wn' + u + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6E83D6"/><stop offset="1" stop-color="#B9B4F0"/></linearGradient></defs>' +
-        '<rect width="640" height="400" fill="url(#wl' + u + ')"/><rect y="296" width="640" height="104" fill="#E5B27A"/><rect y="290" width="640" height="12" fill="#fff" opacity=".85"/>' +
-        '<path d="M0 346 H640 M0 372 H640" stroke="#D49D64" stroke-width="2"/>' +
-        '<g transform="translate(60 60)"><rect x="-8" y="-8" width="176" height="176" rx="14" fill="#fff"/><rect width="160" height="160" rx="8" fill="url(#wn' + u + ')"/><path d="M80 0 V160 M0 80 H160" stroke="#fff" stroke-width="8"/>' +
-        '<path d="M44 34 a18 18 0 1 0 14 24 a14 14 0 1 1 -14 -24Z" fill="#FFF3B0"/><circle cx="120" cy="40" r="3" fill="#fff"/><circle cx="110" cy="116" r="3" fill="#fff"/><circle cx="30" cy="120" r="2.5" fill="#fff"/>' +
-        '<path d="M-14 -10 Q30 40 6 170 H-22Z" fill="#FFB3C7"/><path d="M174 -10 Q130 40 154 170 H182Z" fill="#FFB3C7"/></g>' +
-        '<path d="M0 20 Q160 70 320 28 T640 24" stroke="#8C6A48" stroke-width="3" fill="none"/>' +
-        [30, 100, 170, 240, 310, 380, 450, 520, 590].map(function (x, i) { var y = 28 + Math.sin((x + 20) / 640 * 6.2) * 14 + 22 * Math.sin(x / 640 * 3.1); return '<circle cx="' + x + '" cy="' + (y + 8) + '" r="9" fill="' + ['#FFD36E', '#FF9DB8', '#8FD3F4', '#BDF2C8'][i % 4] + '"/><circle cx="' + x + '" cy="' + (y + 8) + '" r="16" fill="' + ['#FFD36E', '#FF9DB8', '#8FD3F4', '#BDF2C8'][i % 4] + '" opacity=".25"/>'; }).join('') +
-        '<g transform="translate(420 78)"><rect width="88" height="108" rx="6" fill="#fff" stroke="#C99A6B" stroke-width="6"/><rect x="10" y="10" width="68" height="88" fill="#FFD9E6"/><path d="M44 74 C20 58 28 34 44 46 C60 34 68 58 44 74Z" fill="#FF7B9C"/></g>' +
-        '<g transform="translate(530 112)"><rect width="76" height="62" rx="6" fill="#fff" stroke="#C99A6B" stroke-width="6"/><rect x="9" y="9" width="58" height="44" fill="#CFEFFF"/><circle cx="26" cy="26" r="7" fill="#FFD45E"/><path d="M9 53 L30 32 L44 46 L52 38 L67 53Z" fill="#8ED08B"/></g>' +
-        '<g transform="translate(572 260)"><path d="M-22 14 H22 L16 56 H-16Z" fill="#E8896B"/><path d="M0 14 C-30 -20 -34 -44 -8 -40 C-6 -20 0 -10 0 14 M0 14 C30 -30 40 -50 14 -48 C10 -26 2 -10 0 14 M0 14 C-4 -40 4 -64 0 -66" stroke="#5DB86B" stroke-width="9" fill="none" stroke-linecap="round"/></g>' +
-        '<ellipse cx="335" cy="362" rx="250" ry="42" fill="#F6A9BC"/><ellipse cx="335" cy="362" rx="214" ry="34" fill="none" stroke="#fff" stroke-width="4" opacity=".8"/><ellipse cx="335" cy="362" rx="170" ry="26" fill="#FFC9D6"/>' +
-        dogImg('brown', 214, 128, 250) + dogImg('white', 336, 136, 244);
-    }
-  };
-  function sceneSVG(c) { var u = 'a' + (++uidN); return '<svg class="scene" viewBox="0 0 640 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">' + ART[c](u) + '</svg>'; }
 
   // 보로노이 조각: 5개 점으로 그림을 나눔 (0번 = 처음부터 보이는 조각, 1~4번 = 레벨 4/8/12/20에서 열림)
   function clip(poly, a, b, c) { // a*x + b*y <= c 인 쪽을 남김
@@ -183,7 +92,7 @@
   }
   function cells(seeds) {
     return seeds.map(function (s, i) {
-      var poly = [[-2, -2], [642, -2], [642, 402], [-2, 402]];
+      var poly = [[-2, -2], [642, -2], [642, 482], [-2, 482]];
       seeds.forEach(function (o, j) {
         if (i === j) return;
         poly = clip(poly, o[0] - s[0], o[1] - s[1], (o[0] * o[0] + o[1] * o[1] - s[0] * s[0] - s[1] * s[1] - (o[2] || 0) + (s[2] || 0)) / 2);
@@ -199,17 +108,18 @@
     }
     A /= 2; return A ? [cx / (6 * A), cy / (6 * A)] : poly[0];
   }
-  function coversSVG(c, visibleFrom, liftSet) {   // visibleFrom: 이 레벨 이상(= 아직 안 열린) 조각만 그림
+  function coversSVG(c, visibleFrom, liftSet, flat) {
+    var gid = 'pp' + (++uidN);   // visibleFrom: 이 레벨 이상(= 아직 안 열린) 조각만 그림
     var cl = cells(CHAPTERS[c - 1].seeds), html = '';
     MILES.forEach(function (m, k) {
       if (!visibleFrom(m)) return;
       var poly = cl[k + 1], cen = centroid(poly), pts = poly.map(function (p) { return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' ');
       html += '<g class="cover' + (liftSet && liftSet[m] ? ' pre' : '') + '" data-l="' + m + '" style="transform-origin:' + cen[0].toFixed(0) + 'px ' + cen[1].toFixed(0) + 'px">' +
-        '<polygon points="' + pts + '" fill="url(#paper)" stroke="#B48A55" stroke-width="3.5" stroke-dasharray="3 9" stroke-linecap="round" stroke-linejoin="round"/>' +
+        '<polygon points="' + pts + '" fill="' + (flat ? '#E8D3A6' : 'url(#' + gid + ')') + '" stroke="#B48A55" stroke-width="3.5" stroke-dasharray="3 9" stroke-linecap="round" stroke-linejoin="round"/>' +
         '<text x="' + cen[0].toFixed(0) + '" y="' + cen[1].toFixed(0) + '" class="cvNum" text-anchor="middle" dominant-baseline="central">' + m + '</text></g>';
     });
-    return '<svg class="covers" viewBox="0 0 640 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs>' +
-      '<linearGradient id="paper" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#EFDDB7"/><stop offset="1" stop-color="#E2CB9C"/></linearGradient></defs>' + html + '</svg>';
+    return '<svg class="covers" viewBox="0 0 640 480" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs>' +
+      '<linearGradient id="' + gid + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#EFDDB7"/><stop offset="1" stop-color="#E2CB9C"/></linearGradient></defs>' + html + '</svg>';
   }
 
   // 스티커
@@ -278,10 +188,15 @@
     for (var c = 1; c <= 5; c++) if (S.cleared[c - 1] < LEVELS) return { c: c, l: S.cleared[c - 1] + 1 };
     return null;
   }
+  // 메뉴 카드의 작은 액자: 지금 장의 그림 (열린 조각만 보임)
+  function thumbHTML(c, full) {
+    var done = S.cleared[c - 1];
+    return '<span class="acThumb">' + sceneSVG(c) + (full ? '' : coversSVG(c, function (m) { return m > done; }, null, true)) + '</span>';
+  }
   function summary() {
     var t = nextTarget();
-    if (!t) return { title: '모험을 모두 마쳤어요 🎉', sub: '스티커북을 보거나 다시 놀아 보세요', ready: readyGifts().length };
-    return { title: '모험 · ' + t.c + '장 ' + CHAPTERS[t.c - 1].name, sub: '레벨 ' + t.l + ' · 전체 ' + totalCleared() + '/100', ready: readyGifts().length };
+    if (!t) return { title: '모험을 모두 마쳤어요 🎉', sub: '스티커북을 보거나 다시 놀아 보세요', ready: readyGifts().length, thumb: thumbHTML(5, true) };
+    return { title: '모험 · ' + t.c + '장 ' + CHAPTERS[t.c - 1].name, sub: '레벨 ' + t.l + ' · 전체 ' + totalCleared() + '/100', ready: readyGifts().length, thumb: thumbHTML(t.c, false) };
   }
   function labelFor(adv) { return adv ? adv.c + '장 · 레벨 ' + adv.l + ' · ' + DIFF_KO[diffFor(adv.c, adv.l)] : null; }
 
@@ -306,13 +221,15 @@
   function nodePos(l) { var i = l - 1, r = (i / 5) | 0, k = i % 5; return [COLX[r % 2 ? 4 - k : k], ROWY[r]]; }
 
   var CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 12.8l4.2 4.2L18.6 7.6" stroke-width="3.4"/></svg>';
+  var lifted = {};   // 이번에 이미 벗겨 낸 조각 (선물 창 뒤에서 다시 덮이지 않게)
   function render() {
     var c = curPage(), ch = CHAPTERS[c - 1], shown = shownCleared(c), locked = chapterLocked(c);
     if (selChap !== c) { selChap = c; selLevel = Math.min(LEVELS, shown + 1); }
-    var pendSet = {}; S.pend.forEach(function (p) { if (p.c === c && MILES.indexOf(p.l) >= 0) pendSet[p.l] = true; });
+    var pendSet = {}; S.pend.forEach(function (p) { if (p.c === c && MILES.indexOf(p.l) >= 0 && !lifted[c + '-' + p.l]) pendSet[p.l] = true; });
     var done = S.cleared[c - 1];
     // 그림 + 덮개 (덮개는 아직 안 열린 조각만; 막 열릴 조각은 'pre' 로 먼저 보여 줌)
-    var pic = '<div class="advPic" role="img" aria-label="' + esc(c + '장 ' + CHAPTERS[c - 1].name + ' 그림 — ' + CHAPTERS[c - 1].who) + '">' + sceneSVG(c) + coversSVG(c, function (m) { return locked || m > done || pendSet[m]; }, pendSet) +
+    var picDone = !locked && done >= LEVELS && !S.pend.some(function (p) { return p.c === c; });
+    var pic = '<div class="advPic' + (picDone ? ' done' : '') + '"' + (picDone ? ' data-act="pc" data-id="' + c + '" role="button" tabindex="0" aria-label="' + esc(c + '장 그림 크게 보기 — ' + CHAPTERS[c - 1].name) + '"' : ' role="img" aria-label="' + esc(c + '장 ' + CHAPTERS[c - 1].name + ' 그림 — ' + CHAPTERS[c - 1].who + ' (조각을 열어 보세요)') + '"') + '>' + sceneSVG(c) + coversSVG(c, function (m) { return locked || m > done || pendSet[m]; }, pendSet) +
       (locked ? '<div class="advLock"><b>🔒</b><span>' + (c - 1) + '장을 끝내면 열려요</span></div>' : '') + '</div>';
     // 진행 막대
     var gifts = MILES.map(function (m) {
@@ -388,6 +305,7 @@
       // 2) 그림 조각 열기
       T(function () {
         var cv = document.querySelector('.cover[data-l="' + l + '"]');
+        lifted[c + '-' + l] = true;
         if (cv) { cv.classList.remove('pre'); cv.classList.add(rm ? 'liftRM' : 'lift'); sparkles(cv); }
         // 3) 선물
         T(function () {
@@ -413,8 +331,17 @@
     }
     setTimeout(function () { if (g.parentNode) g.parentNode.removeChild(g); }, 2200);
   }
+  function showPostcard(c) {
+    var ch = CHAPTERS[c - 1], el = $('postcard');
+    if (!el) { el = document.createElement('div'); el.id = 'postcard'; el.className = 'overlay'; el.hidden = true; document.body.appendChild(el); }
+    el.innerHTML = '<div class="pcCard"><div class="pcPhoto"><img src="art/ch' + c + '-full.webp" alt="' + esc(c + '장 ' + ch.name + ' — ' + ch.who) + '"></div>' +
+      '<div class="pcCap"><b>' + c + '장 · ' + esc(ch.name) + '</b><span>' + esc(ch.desc) + '</span></div><button class="primary pill" id="pcOk">닫기</button></div>';
+    el.hidden = false;
+    var close = function () { el.hidden = true; el.innerHTML = ''; };
+    $('pcOk').onclick = close; el.onclick = function (e) { if (e.target === el) close(); };
+  }
   function banner(c, done) {
-    var el = $('advBanner'); el.innerHTML = '<div class="bnCard"><div class="bnBig">🖼️</div><h3>' + c + '장 그림 완성!</h3><p>' + (c < 5 ? '다음 장이 열렸어요' : '토리와 캐피랑 모든 모험을 마쳤어요 🎉') + '</p><button class="primary pill" id="bnOk">좋아요</button></div>';
+    var el = $('advBanner'); el.innerHTML = '<div class="bnCard"><div class="bnPic"><img src="art/ch' + c + '.webp" alt="' + esc(CHAPTERS[c - 1].name + ' 그림') + '"></div><h3>' + c + '장 그림 완성!</h3><p>' + (c < 5 ? '다음 장이 열렸어요' : '토리와 캐피랑 모든 모험을 마쳤어요 🎉') + '</p><button class="primary pill" id="bnOk">좋아요</button></div>';
     el.hidden = false;
     $('bnOk').onclick = function () { el.hidden = true; done(); };
     if (window.SudokuFX) try { SudokuFX.play({ effect: 'stars' }); } catch (e) {}
@@ -485,7 +412,8 @@
     h += '<div class="alSec"><h3>완성한 그림 <small>' + S.cleared.filter(function (n) { return n >= LEVELS; }).length + '/5</small></h3><div class="alGrid pics">';
     CHAPTERS.forEach(function (ch, i) {
       var own = S.cleared[i] >= LEVELS;
-      h += '<div class="alPic' + (own ? '' : ' locked') + '">' + (own ? sceneSVG(i + 1) : '<div class="alQ">🔒</div>') + '<span class="alName">' + (i + 1) + '장 ' + esc(ch.name) + '</span></div>';
+      h += (own ? '<button class="alPic" data-act="pc" data-id="' + (i + 1) + '" aria-label="' + esc((i + 1) + '장 ' + ch.name + ' 그림 크게 보기') + '"><span class="alFrame"><img src="art/ch' + (i + 1) + '-th.webp" alt="' + esc(ch.name + ' — ' + ch.who) + '" loading="lazy"></span>' :
+        '<div class="alPic locked"><span class="alFrame"><span class="alQ">🔒</span></span>') + '<span class="alName">' + (i + 1) + '장 ' + esc(ch.name) + '</span>' + (own ? '</button>' : '</div>') + '\n';
     });
     h += '</div></div>';
     $('albumBody').innerHTML = h; $('album').hidden = false; $('album').scrollTop = 0;
@@ -498,6 +426,7 @@
     var act = b.getAttribute('data-act'), l = +b.getAttribute('data-l') || 0, c = curPage();
     if (act === 'back') { hide(); if (A()) A().afterMapBack(); }
     else if (act === 'album') showAlbum();
+    else if (act === 'pc') showPostcard(+b.getAttribute('data-id'));
     else if (act === 'prev') setChapter(c - 1);
     else if (act === 'next') { if (chapterLocked(c + 1)) { setChapter(c + 1); toast('앞 장을 먼저 끝내면 열려요'); } else setChapter(c + 1); }
     else if (act === 'node') {
@@ -521,7 +450,8 @@
   function onAlbumClick(e) {
     var b = e.target.closest ? e.target.closest('[data-act]') : null; if (!b) return;
     var act = b.getAttribute('data-act'), id = b.getAttribute('data-id');
-    if (act === 'albumBack') { $('album').hidden = true; if (!$('adv').hidden) render(); else if (A()) A().afterMapBack(); }
+    if (act === 'pc') showPostcard(+id);
+    else if (act === 'albumBack') { $('album').hidden = true; if (!$('adv').hidden) render(); else if (A()) A().afterMapBack(); }
     else if (act === 'stk') {
       if (!ownsSticker(id)) { toast('선물 상자에서 만날 수 있어요 🎁'); return; }
       b.classList.remove('wig'); void b.offsetWidth; b.classList.add('wig'); toast(STICKERS[id].name);
