@@ -14,22 +14,22 @@
   var DOG_NAME = { brown: '토리', white: '캐피' };
   var DOG = { brown: 'dogs/dog-brown.webp', white: 'dogs/dog-white.webp' };
 
-  // 난이도 곡선: [쉬움 마지막 레벨, 보통 마지막 레벨] (그 뒤는 어려움). 전문가 난이도는 모험에서 쓰지 않아요.
-  var CURVE = [[20, 20], [6, 20], [0, 20], [0, 8], [0, 0]];
-  function diffFor(c, l) { var k = CURVE[c - 1]; return l <= k[0] ? 'easy' : (l <= k[1] ? 'medium' : 'hard'); }
+  // 난이도 곡선: [쉬움 마지막 레벨, 보통 마지막 레벨] (그 뒤는 어려움). 4장·5장은 모든 레벨이 전문가('expert').
+  var CURVE = [[20, 20], [6, 20], [0, 20], 'expert', 'expert'];
+  function diffFor(c, l) { var k = CURVE[c - 1]; if (typeof k === 'string') return k; return l <= k[0] ? 'easy' : (l <= k[1] ? 'medium' : 'hard'); }
   var DIFF_KO = { easy: '쉬움', medium: '보통', hard: '어려움', expert: '전문가' };
 
   var STICKERS = {
-    s1: { name: '산책 나온 토리', dogs: ['brown'], emo: '🌼', bg: ['#C8F0C0', '#8ED88F'] },
-    s2: { name: '들판의 캐피', dogs: ['white'], emo: '🌿', bg: ['#FFE0EC', '#FFB7D0'] },
-    s3: { name: '신난 토리', dogs: ['brown'], emo: '🐾', bg: ['#FFF0C2', '#FFD27A'] },
-    s4: { name: '탁 트인 곳의 캐피', dogs: ['white'], emo: '🌾', bg: ['#FFE3D3', '#FFB99A'] },
-    s5: { name: '졸린 토리', dogs: ['brown'], emo: '💤', bg: ['#C9F0FF', '#7DD6EE'] },
-    s6: { name: '쿨쿨 캐피', dogs: ['white'], emo: '🌙', bg: ['#D8F4F4', '#9FE0E2'] },
-    s7: { name: '꿈나라 토리', dogs: ['brown'], emo: '☁️', bg: ['#E4EEFF', '#B7CFF7'] },
-    s8: { name: '새근새근 캐피', dogs: ['white'], emo: '😴', bg: ['#EBE3FF', '#C7B8F5'] },
-    s9: { name: '식물 사이 토리', dogs: ['brown'], emo: '🏠', bg: ['#FFE8C6', '#FFC98C'] },
-    s10: { name: '토리와 캐피', dogs: ['brown', 'white'], emo: '💕', bg: ['#FFD9E6', '#FFA9C8'] }
+    s1: { name: '산책 나온 토리', dogs: ['brown'], face: 'dogs/face-01.webp', emo: '🌼', bg: ['#C8F0C0', '#8ED88F'] },
+    s2: { name: '들판의 캐피', dogs: ['white'], face: 'dogs/face-02.webp', emo: '🌿', bg: ['#FFE0EC', '#FFB7D0'] },
+    s3: { name: '신난 토리', dogs: ['brown'], face: 'dogs/face-03.webp', emo: '🐾', bg: ['#FFF0C2', '#FFD27A'] },
+    s4: { name: '탁 트인 곳의 캐피', dogs: ['white'], face: 'dogs/face-04.webp', emo: '🌾', bg: ['#FFE3D3', '#FFB99A'] },
+    s5: { name: '졸린 토리', dogs: ['brown'], face: 'dogs/face-05.webp', emo: '💤', bg: ['#C9F0FF', '#7DD6EE'] },
+    s6: { name: '쿨쿨 캐피', dogs: ['white'], face: 'dogs/face-06.webp', emo: '🌙', bg: ['#D8F4F4', '#9FE0E2'] },
+    s7: { name: '꿈나라 토리', dogs: ['brown'], face: 'dogs/face-07.webp', emo: '☁️', bg: ['#E4EEFF', '#B7CFF7'] },
+    s8: { name: '새근새근 캐피', dogs: ['white'], face: 'dogs/face-08.webp', emo: '😴', bg: ['#EBE3FF', '#C7B8F5'] },
+    s9: { name: '식물 사이 토리', dogs: ['brown'], face: 'dogs/face-09.webp', emo: '🏠', bg: ['#FFE8C6', '#FFC98C'] },
+    s10: { name: '토리와 캐피', dogs: ['brown', 'white'], face: 'dogs/face-10.webp', emo: '💕', bg: ['#FFD9E6', '#FFA9C8'] }
   };
   var EFFECT_INFO = {
     petals: { name: '꽃잎 날리기', emo: '🌸' }, paws: { name: '발자국 총총', emo: '🐾' }, bubbles: { name: '비눗방울', emo: '🫧' },
@@ -126,7 +126,8 @@
   function stickerHTML(id, size, locked) {
     var s = STICKERS[id], face = '';
     if (locked) return '<div class="stk lock" style="--s:' + size + 'px" role="img" aria-label="아직 못 받은 스티커"><div class="stkFace"><b>?</b></div></div>';
-    if (s.dogs.length === 1) face = '<i style="background-image:url(' + DOG[s.dogs[0]] + ')"></i>';
+    if (s.face) face = '<i class="fc" style="background-image:url(' + s.face + ')"></i>';   // 얼굴 사진(원형 크롭). 없으면 예전 강아지 그림
+    else if (s.dogs.length === 1) face = '<i style="background-image:url(' + DOG[s.dogs[0]] + ')"></i>';
     else face = '<i class="l" style="background-image:url(' + DOG[s.dogs[0]] + ')"></i><i class="r" style="background-image:url(' + DOG[s.dogs[1]] + ')"></i>';
     return '<div class="stk" role="img" aria-label="스티커: ' + esc(s.name) + '" style="--s:' + size + 'px"><div class="stkFace" style="background:linear-gradient(160deg,' + s.bg[0] + ',' + s.bg[1] + ')">' + face + '</div><span class="stkEmo">' + s.emo + '</span></div>';
   }

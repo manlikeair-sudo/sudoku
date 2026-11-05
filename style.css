@@ -334,6 +334,7 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 2; stroke-
 .stk { position: relative; width: var(--s); height: var(--s); border-radius: 50%; background: #fff; padding: calc(var(--s) * .05); box-shadow: 0 3px 8px rgba(80,50,20,.28); flex: none; }
 .stkFace { position: relative; width: 100%; height: 100%; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; }
 .stkFace i { position: absolute; left: 50%; top: 2%; width: 118%; aspect-ratio: 281 / 600; transform: translateX(-50%); background-size: 100% 100%; background-repeat: no-repeat; }
+.stkFace i.fc { left: 7%; top: 7%; width: 86%; height: 86%; aspect-ratio: auto; transform: none; border-radius: 50%; background-size: cover; background-position: center; box-shadow: 0 1px 3px rgba(0,0,0,.2); }
 .stkFace i.l { left: 32%; width: 92%; top: 8%; } .stkFace i.r { left: 70%; width: 92%; top: 8%; }
 .stkEmo { position: absolute; right: -2%; bottom: -2%; width: 36%; height: 36%; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; font-size: calc(var(--s) * .22); box-shadow: 0 1px 4px rgba(0,0,0,.25); }
 .stk.lock { background: #E1D3BB; box-shadow: none; } .stk.lock .stkFace { background: #CDBB9C; } .stk.lock b { font-size: calc(var(--s) * .45); color: #F4EAD6; }
