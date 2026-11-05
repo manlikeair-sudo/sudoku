@@ -1,7 +1,7 @@
 {
   "name": "스도쿠",
   "short_name": "스도쿠",
-  "description": "광고 없는 조용한 스도쿠",
+  "description": "토리와 캐피 스도쿠",
   "lang": "ko",
   "start_url": "./index.html",
   "scope": "./",
