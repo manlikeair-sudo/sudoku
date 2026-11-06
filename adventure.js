@@ -14,8 +14,8 @@
   var DOG_NAME = { brown: '토리', white: '캐피' };
   var DOG = { brown: 'dogs/dog-brown.webp', white: 'dogs/dog-white.webp' };
 
-  // 난이도 곡선: [쉬움 마지막 레벨, 보통 마지막 레벨] (그 뒤는 어려움). 4장·5장은 모든 레벨이 전문가('expert').
-  var CURVE = [[20, 20], [6, 20], [0, 20], 'expert', 'expert'];
+  // 난이도 곡선: 1~5장 모든 레벨이 전문가('expert'). 4장과 동일 난이도.
+  var CURVE = ['expert', 'expert', 'expert', 'expert', 'expert'];
   function diffFor(c, l) { var k = CURVE[c - 1]; if (typeof k === 'string') return k; return l <= k[0] ? 'easy' : (l <= k[1] ? 'medium' : 'hard'); }
   var DIFF_KO = { easy: '쉬움', medium: '보통', hard: '어려움', expert: '전문가' };
 
@@ -150,42 +150,6 @@
   function save() { lsSet(KEY, JSON.stringify(S)); }
   function giftKey(c, l) { return c + '-' + l; }
 
-  // 1~(n-1)장을 완료로 합치기(덮어쓰기·축소 없음). n=4면 1~3장 완료 + 4장 해금.
-  function boostToChapter(n) {
-    n = Math.max(2, Math.min(5, n | 0));
-    var changed = false, c, i, k, m, before;
-    for (c = 1; c < n; c++) {
-      before = S.cleared[c - 1];
-      if (before < LEVELS) { S.cleared[c - 1] = LEVELS; changed = true; }
-      for (i = 0; i < MILES.length; i++) {
-        m = MILES[i]; k = giftKey(c, m);
-        if (S.gifts[k] !== 2) { S.gifts[k] = 2; changed = true; }
-      }
-    }
-    // 완료 처리한 장의 미재생 연출은 제거
-    var kept = S.pend.filter(function (p) { return p.c >= n; });
-    if (kept.length !== S.pend.length) { S.pend = kept; changed = true; }
-    if (S.chap < n - 1) { S.chap = n - 1; changed = true; }
-    // 기본 테마만 쓰고 있으면 방금 연 장의 보드 색으로
-    if (S.theme === 'basic' && n > 1) {
-      S.theme = CHAPTERS[n - 2].theme; changed = true;
-    }
-    if (changed) save();
-    syncFx(); applyBoard();
-    return { changed: changed, state: JSON.parse(JSON.stringify(S)) };
-  }
-  function needsBoost(n) {
-    n = Math.max(2, Math.min(5, n | 0));
-    var c, i, m;
-    for (c = 1; c < n; c++) {
-      if (S.cleared[c - 1] < LEVELS) return true;
-      for (i = 0; i < MILES.length; i++) {
-        m = MILES[i];
-        if (S.gifts[giftKey(c, m)] !== 2) return true;
-      }
-    }
-    return false;
-  }
   function ownedEffects() {
     var out = [];
     CHAPTERS.forEach(function (ch, i) { if (S.gifts[giftKey(i + 1, 8)] === 2) out.push(ch.fx); });
@@ -503,36 +467,11 @@
       S.theme = id; save(); applyBoard(); showAlbum(); var sc = $('album').scrollTop; $('album').scrollTop = sc;
     }
   }
-  function stripStartParam() {
-    try {
-      var u = new URL(location.href);
-      if (!u.searchParams.has('start')) return;
-      u.searchParams.delete('start');
-      history.replaceState(null, '', u.pathname + u.search + u.hash);
-    } catch (e) {}
-  }
-  function applyStartParam() {
-    var n = 0;
-    try {
-      var u = new URL(location.href);
-      n = parseInt(u.searchParams.get('start') || '0', 10) || 0;
-    } catch (e) { n = 0; }
-    if (n < 2 || n > 5) return false;
-    boostToChapter(n);
-    stripStartParam();
-    return n;
-  }
   function init() {
     $('adv').addEventListener('click', onAdvClick);
     $('album').addEventListener('click', onAlbumClick);
-    var started = applyStartParam();
     applyBoard(); syncFx();
     if (A() && A().refreshMenu) A().refreshMenu();
-    if (started) {
-      selChap = -1;
-      if (A() && A().toast) A().toast('1~' + (started - 1) + '장 완료! ' + started + '장부터 시작해요');
-      setTimeout(function () { show(); }, 50);
-    }
     if (window.matchMedia) {
       var mq = window.matchMedia('(prefers-color-scheme: dark)');
       if (mq.addEventListener) mq.addEventListener('change', applyBoard);
@@ -542,8 +481,7 @@
   window.SudokuAdv = {
     open: show, close: hide, summary: summary, labelFor: labelFor, diffFor: diffFor, onFinish: onFinish, applyBoard: applyBoard,
     isOpen: function () { return !$('adv').hidden || !$('album').hidden; },
-    state: function () { return JSON.parse(JSON.stringify(S)); }, CHAPTERS: CHAPTERS, MILES: MILES,
-    boostToChapter: boostToChapter, needsBoost: needsBoost
+    state: function () { return JSON.parse(JSON.stringify(S)); }, CHAPTERS: CHAPTERS, MILES: MILES
   };
   init();
 })();
