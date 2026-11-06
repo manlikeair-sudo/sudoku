@@ -154,7 +154,11 @@
     blkTimer = setTimeout(function () { cellEls.forEach(function (c) { c.classList.remove('blk'); }); }, 900);
     toast('같은 줄·칸에 이미 ' + n + '이(가) 있어요');
   }
-  // 행/열/박스를 하나 완성하면 해당 칸들이 물결처럼 살짝 반짝임 (게임 전체 완성 때는 큰 축하 효과가 대신함)
+  // 행/열/박스를 하나 완성하면 숫자가 살짝 부풀었다가 비눗방울처럼 팡팡 터짐
+  // (틀린 답·메모 차단의 shake 는 그대로 — 오답이 터지면 어색해서)
+  function prefersReduceMotion() {
+    return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
   function pulseNewUnits(before) {
     if (!game || game.isCompleted) return;
     var after = G.completedUnits(game), seen = {};
@@ -164,12 +168,42 @@
         if (seen[ci] === undefined) seen[ci] = k;
       });
     });
+    var rm = prefersReduceMotion(), wrap = $('boardWrap');
+    if (wrap) {
+      var oldB = wrap.querySelectorAll('.bub');
+      for (var oi = 0; oi < oldB.length; oi++) if (oldB[oi].parentNode) oldB[oi].parentNode.removeChild(oldB[oi]);
+    }
     Object.keys(seen).forEach(function (ci) {
-      var el = cellEls[ci];
-      el.style.setProperty('--pd', (seen[ci] * 55) + 'ms');
+      var el = cellEls[ci], delay = seen[ci] * 40;
+      el.style.setProperty('--pd', delay + 'ms');
       el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
-      setTimeout(function () { el.classList.remove('pop'); }, 1100 + seen[ci] * 55);
+      setTimeout(function () { el.classList.remove('pop'); }, 650 + delay);
+      if (!rm && wrap) setTimeout(function () { spawnBubbles(el, wrap); }, delay + 90);
     });
+  }
+  function spawnBubbles(cell, wrap) {
+    if (!cell || !wrap) return;
+    var cr = cell.getBoundingClientRect(), wr = wrap.getBoundingClientRect();
+    var cx = cr.left - wr.left + cr.width / 2, cy = cr.top - wr.top + cr.height / 2;
+    var n = 4, colors = ['#8ED4FF', '#B5E6FF', '#D2F2FF', '#9FDCFF', '#C8ECFF'];
+    for (var i = 0; i < n; i++) {
+      var b = document.createElement('i');
+      b.className = 'bub';
+      var ang = (Math.PI * 2 * i) / n + (Math.random() - 0.5) * 0.55;
+      var dist = 16 + Math.random() * 26;
+      var size = 5 + Math.random() * 7;
+      b.style.left = cx + 'px';
+      b.style.top = cy + 'px';
+      b.style.width = size + 'px';
+      b.style.height = size + 'px';
+      b.style.setProperty('--bx', (Math.cos(ang) * dist).toFixed(1) + 'px');
+      b.style.setProperty('--by', (Math.sin(ang) * dist - 6).toFixed(1) + 'px');
+      b.style.setProperty('--bc', colors[i % colors.length]);
+      wrap.appendChild(b);
+      (function (el) {
+        setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 620);
+      })(b);
+    }
   }
   function shake(i) {
     var el = cellEls[i]; if (!el) return;
