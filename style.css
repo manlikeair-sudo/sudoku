@@ -114,6 +114,7 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 2; stroke-
 .primary.pill { border-radius: 999px; padding: 0 48px; }
 .plain { background: var(--btn); border: 1px solid var(--thin); font-weight: 600; font-size: 20px; border-radius: 16px; min-height: 60px; padding: 0 28px; }
 .textBtn { font-size: 18px; font-weight: 600; min-height: 48px; color: var(--accent); align-self: center; padding: 0 24px; }
+.textBtn.quiet { color: var(--muted, #8A8F9C); font-size: 15px; font-weight: 500; min-height: 40px; margin-top: 4px; }
 
 /* ---- 메뉴 ---- */
 #menu { position: absolute; inset: 0; background: var(--bg); overflow-y: auto; -webkit-overflow-scrolling: touch; z-index: 10;

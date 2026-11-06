@@ -28,7 +28,7 @@
   var stats = load(STATS_KEY) || { bestTimes: {}, solvedCounts: {} };
   if (!stats.bestTimes) stats.bestTimes = {};
   if (!stats.solvedCounts) stats.solvedCounts = {};
-  var isNewRecord = false, menuOpenInGame = false;
+  var isNewRecord = false, menuOpenInGame = false, pendingBoost = false;
   var cellEls = [], cellKey = [], padEls = [];
 
   // ---- 테마 ----
@@ -254,6 +254,10 @@
       var sm = window.SudokuAdv.summary();
       if (sm.thumb) $('advCardI').innerHTML = sm.thumb; $('advCardT').textContent = sm.title; $('advCardS').textContent = sm.sub;
       $('advCardDot').hidden = !sm.ready;
+      var b4 = $('btnBoost4');
+      if (b4) b4.hidden = !window.SudokuAdv.needsBoost(4);
+    } else {
+      var b4x = $('btnBoost4'); if (b4x) b4x.hidden = true;
     }
     $('diffList').innerHTML = E.ORDER.map(function (d) {
       var best = stats.bestTimes[d], n = stats.solvedCounts[d] || 0;
@@ -395,8 +399,36 @@
   on('btnCloseMenu', function () { closeMenu(); });
   on('btnDoneNew', leaveCompleted); on('btnDoneNext', doneNext);
   on('btnAdv', function () { if (window.SudokuAdv) window.SudokuAdv.open(); });
-  on('confirmNo', function () { pendingDiff = null; pendingAdv = null; $('confirm').hidden = true; });
-  on('confirmYes', function () { var d = pendingDiff, ad = pendingAdv; pendingDiff = null; pendingAdv = null; $('confirm').hidden = true; if (d) startNewGame(d, ad); });
+  function resetConfirm() {
+    pendingDiff = null; pendingAdv = null; pendingBoost = false;
+    $('confirm').hidden = true;
+    $('confirmMsg').innerHTML = '진행 중인 게임이 사라져요.<br>새 게임을 시작할까요?';
+    $('confirmYes').textContent = '시작';
+  }
+  on('confirmNo', function () { resetConfirm(); });
+  on('confirmYes', function () {
+    if (pendingBoost) {
+      pendingBoost = false; $('confirm').hidden = true;
+      $('confirmMsg').innerHTML = '진행 중인 게임이 사라져요.<br>새 게임을 시작할까요?';
+      $('confirmYes').textContent = '시작';
+      if (window.SudokuAdv) {
+        window.SudokuAdv.boostToChapter(4);
+        toast('1~3장 완료! 4장부터 시작해요');
+        renderMenu();
+        closeMenu();
+        window.SudokuAdv.open();
+      }
+      return;
+    }
+    var d = pendingDiff, ad = pendingAdv; pendingDiff = null; pendingAdv = null; $('confirm').hidden = true; if (d) startNewGame(d, ad);
+  });
+  on('btnBoost4', function () {
+    if (!window.SudokuAdv || !window.SudokuAdv.needsBoost(4)) return;
+    pendingBoost = true; pendingDiff = null; pendingAdv = null;
+    $('confirmMsg').innerHTML = '1~3장을 완료로 표시하고<br>4장부터 시작할까요?';
+    $('confirmYes').textContent = '시작';
+    $('confirm').hidden = false;
+  });
   $('diffList').addEventListener('click', function (e) {
     var b = e.target.closest ? e.target.closest('.diffRow') : null;
     if (b) requestNewGame(b.getAttribute('data-d'), null);
